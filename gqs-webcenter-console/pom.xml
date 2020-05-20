@@ -12,7 +12,7 @@
     <artifactId>gqs-webcenter-console</artifactId>
     <properties>
         <kaptcha.version>0.0.9</kaptcha.version>
-        <shiro.version>1.4.0</shiro.version>
+        <shiro.version>1.5.3</shiro.version>
         <jsonwebtoken.version>0.9.1</jsonwebtoken.version>
     </properties>
     <dependencies>
