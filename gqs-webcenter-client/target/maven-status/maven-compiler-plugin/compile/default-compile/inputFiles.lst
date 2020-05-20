@@ -1,0 +1,14 @@
+/Users/jasongao/Documents/github/gqs-webcenter/gqs-webcenter-client/src/main/java/com/github/gaoqisen/webcenter/pojo/Result.java
+/Users/jasongao/Documents/github/gqs-webcenter/gqs-webcenter-client/src/main/java/com/github/gaoqisen/webcenter/pojo/SysUser.java
+/Users/jasongao/Documents/github/gqs-webcenter/gqs-webcenter-client/src/main/java/com/github/gaoqisen/webcenter/pojo/WebCenterConsole.java
+/Users/jasongao/Documents/github/gqs-webcenter/gqs-webcenter-client/src/main/java/com/github/gaoqisen/webcenter/http/HttpUtil.java
+/Users/jasongao/Documents/github/gqs-webcenter/gqs-webcenter-client/src/main/java/com/github/gaoqisen/webcenter/pojo/SysRest.java
+/Users/jasongao/Documents/github/gqs-webcenter/gqs-webcenter-client/src/main/java/com/github/gaoqisen/webcenter/core/WebCenterClientBeanFactory.java
+/Users/jasongao/Documents/github/gqs-webcenter/gqs-webcenter-client/src/main/java/com/github/gaoqisen/webcenter/shiro/ShiroConfigUtils.java
+/Users/jasongao/Documents/github/gqs-webcenter/gqs-webcenter-client/src/main/java/com/github/gaoqisen/webcenter/api/ApiController.java
+/Users/jasongao/Documents/github/gqs-webcenter/gqs-webcenter-client/src/main/java/com/github/gaoqisen/webcenter/constant/ServerContextConstant.java
+/Users/jasongao/Documents/github/gqs-webcenter/gqs-webcenter-client/src/main/java/com/github/gaoqisen/webcenter/pojo/SysCode.java
+/Users/jasongao/Documents/github/gqs-webcenter/gqs-webcenter-client/src/main/java/com/github/gaoqisen/webcenter/shiro/MyPermissionsAuthorizationFilter.java
+/Users/jasongao/Documents/github/gqs-webcenter/gqs-webcenter-client/src/main/java/com/github/gaoqisen/webcenter/shiro/MyShiroRealm.java
+/Users/jasongao/Documents/github/gqs-webcenter/gqs-webcenter-client/src/main/java/com/github/gaoqisen/webcenter/core/WebCenterInitializing.java
+/Users/jasongao/Documents/github/gqs-webcenter/gqs-webcenter-client/src/main/java/com/github/gaoqisen/webcenter/shiro/MyFormAuthenticationFilter.java

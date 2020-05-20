@@ -1,0 +1,16 @@
+server:
+  port: 8001
+spring:
+  # RestController返回json格式
+  jackson:
+    default-property-inclusion: non_null
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  application:
+    name: webcenter-sample
+webcenter:
+  server:
+    host : localhost
+    port: 8000
+    clientid: WZUIIXWZUIIX
+    secretkey: qOIWRbzeFvOnXUYTspfSt2ibfJPe1vtG

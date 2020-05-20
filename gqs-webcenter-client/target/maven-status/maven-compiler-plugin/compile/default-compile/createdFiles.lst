@@ -1,0 +1,14 @@
+com/github/gaoqisen/webcenter/shiro/MyFormAuthenticationFilter.class
+com/github/gaoqisen/webcenter/shiro/MyPermissionsAuthorizationFilter.class
+com/github/gaoqisen/webcenter/constant/ServerContextConstant.class
+com/github/gaoqisen/webcenter/core/WebCenterInitializing.class
+com/github/gaoqisen/webcenter/pojo/SysUser.class
+com/github/gaoqisen/webcenter/shiro/ShiroConfigUtils.class
+com/github/gaoqisen/webcenter/http/HttpUtil.class
+com/github/gaoqisen/webcenter/pojo/WebCenterConsole.class
+com/github/gaoqisen/webcenter/api/ApiController.class
+com/github/gaoqisen/webcenter/pojo/SysCode.class
+com/github/gaoqisen/webcenter/shiro/MyShiroRealm.class
+com/github/gaoqisen/webcenter/pojo/Result.class
+com/github/gaoqisen/webcenter/pojo/SysRest.class
+com/github/gaoqisen/webcenter/core/WebCenterClientBeanFactory.class
