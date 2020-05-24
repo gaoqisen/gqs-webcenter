@@ -3,6 +3,7 @@ package com.github.gaoqisen.webcenter.http;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.gaoqisen.webcenter.constant.ServerContextConstant;
+import com.github.gaoqisen.webcenter.constant.SysPrompt;
 import com.github.gaoqisen.webcenter.core.WebCenterClientBeanFactory;
 import com.github.gaoqisen.webcenter.pojo.WebCenterConsole;
 
@@ -33,14 +34,18 @@ public class HttpUtil {
         object.put("applicationName", webCenterConsole.getCurrentApplicationName());
         String returnStr = hostPortSendPost(webCenterConsole.getHost(), webCenterConsole.getPort(), url, JSON.toJSONString(object));
         if(returnStr == null) {
-            throw new RuntimeException("POST请求失败，请求检查WebCenter服务是否启动。");
+            throw new RuntimeException(SysPrompt.POST_REQUEST_ERROR);
         }
         JSONObject jsonObject = JSONObject.parseObject(returnStr);
         return jsonObject;
     }
 
-    public static String hostPortSendPost(String host, String port, String centext, String params) {
-        return sendPost("http://".concat(host).concat(":").concat(port).concat(centext), params);
+    public static String hostPortSendPost(String host, Integer port, String context, String params) {
+        return sendPost(urlJoint(host, port, context), params);
+    }
+
+    public static String urlJoint(String host, Integer port, String context) {
+        return "http://".concat(host).concat(":").concat(String.valueOf(port)).concat(context);
     }
 
     public static String sendPost(String url, String params) {

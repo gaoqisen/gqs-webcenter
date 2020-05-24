@@ -1,6 +1,8 @@
 package com.github.gaoqisen.webcenter.pojo;
 
 
+import com.github.gaoqisen.webcenter.constant.SysPrompt;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,7 +19,7 @@ public class Result extends HashMap<String, Object> {
 	}
 	
 	public static Result error() {
-		return error(1, "网络异常！");
+		return error(1, SysPrompt.ERROR);
 	}
 	
 	public static Result error(String msg) {

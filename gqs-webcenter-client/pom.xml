@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.gaoqisen</groupId>
-    <artifactId>webcenter-client</artifactId>
+    <artifactId>gqs-webcenter-client</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>${project.groupId}:${project.artifactId}</name>
@@ -16,9 +16,9 @@
         </license>
     </licenses>
     <scm>
-        <url> https://github.com/gaoqisen/gqs-webcenter</url>
-        <connection>https://github.com/gaoqisen/gqs-webcenter.git</connection>
-        <developerConnection>https://github.com/gaoqisen/gqs-webcenter</developerConnection>
+        <url>https://github.com/gaoqisen/gqs-webcenter</url>
+        <connection>scm:git@github.com:gaoqisen/gqs-webcenter.git</connection>
+        <developerConnection>scm:git@github.com:gaoqisen/gqs-webcenter.git</developerConnection>
     </scm>
     <developers>
         <developer>
@@ -39,18 +39,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-core</artifactId>
-            <version>${shiro.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-spring</artifactId>
-            <version>${shiro.version}</version>
-            <scope>compile</scope>
-        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
@@ -97,6 +85,11 @@
             <artifactId>spring-data-redis</artifactId>
             <version>${redis.version}</version>
         </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>2.7.3</version>
+        </dependency>
     </dependencies>
     <distributionManagement>
         <snapshotRepository>
@@ -136,7 +129,7 @@
                 <version>2.2.1</version>
                 <executions>
                     <execution>
-                        <id>attach-sources</id>
+                        <phase>package</phase>
                         <goals>
                             <goal>jar-no-fork</goal>
                         </goals>
@@ -147,10 +140,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.3</version>
+                <version>2.9.1</version>
                 <executions>
                     <execution>
-                        <id>attach-javadocs</id>
+                        <phase>package</phase>
                         <goals>
                             <goal>jar</goal>
                         </goals>
@@ -173,10 +166,9 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.6</version>
+                <version>1.5</version>
                 <executions>
                     <execution>
-                        <id>sign-artifacts</id>
                         <phase>verify</phase>
                         <goals>
                             <goal>sign</goal>
