@@ -67,13 +67,19 @@ Webpack4.0.0+
 2. 可以通过下载源码进行编译获取jar包，源码结构如下：
     
     ```
-    gqs-webcenter-client // 客服端
-    gqs-webcenter-common // 通用工具
-    gqs-webcenter-component // 通用组件
-    gqs-webcenter-console // 控制台，需要编译打包的模块
-    gqs-webcenter-sample // 简单的客服端例子
-    gqs-webcenter-service // 服务层，数据访问层
-    gqs-webcenter-webpage // 前端项目,build之后将静态文件打包到了 gqs-webcenter-console的resource/public里面
+     ──gqs-webcenter
+       ├── db  // 数据库
+       │   └── webcenter.sql // 数据库初始化脚本
+       ├── gqs-webcenter-client  // 客服端
+       ├── gqs-webcenter-common  // 通用工具
+       ├── gqs-webcenter-component  // 通用组件
+       │   ├── gqs-webcenter-redis  // redis组件
+       │   ├── gqs-webcenter-webapi  // swagger组件
+       ├── gqs-webcenter-console  // 控制台，需要编译打包的模块
+       ├── gqs-webcenter-sample  // 简单的客服端例子
+       ├── gqs-webcenter-service  // 服务层，数据访问层
+       ├── gqs-webcenter-webpage  // 前端项目,build之后将静态文件打包到了 gqs-webcenter-console的resource/public里面
+       └── readme.md  // 项目介绍
     ```
 3. 部署成功之后访问http://localhost:8000， 出现如下页面表示部署成功。默认登录账号admin,登录密码admin。
         ![https://gaoqisen.github.io/GraphBed/202005/20200523232105.png](https://gaoqisen.github.io/GraphBed/202005/20200523232105.png)
