@@ -130,6 +130,21 @@ Webpack4.0.0+
         <artifactId>gqs-webcenter-client</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </dependency>
+  
+    # 因为是快照版本，因此需要引入快照版本仓库
+    <repositories>
+      <repository>
+        <id>sonatypeSnapshots</id>
+        <name>Sonatype Snapshots</name>
+        <releases>
+          <enabled>false</enabled>
+        </releases>
+        <snapshots>
+          <enabled>true</enabled>
+        </snapshots>
+        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      </repository>
+    </repositories>
     ```
 - application.yml配置文件添加配置
 
@@ -141,7 +156,7 @@ Webpack4.0.0+
         time-zone: GMT+8
       application:
         name: webcenter-sample
-      ### 需要和服务端的redis是同一个
+      # 需要和服务端的redis是同一个
       redis:
         host: localhost
         password: 123456
@@ -154,7 +169,7 @@ Webpack4.0.0+
         port: 8000
         clientid: WZUIIXWZUIIX
         secretkey: qOIWRbzeFvOnXUYTspfSt2ibfJPe1vtG
-      ### 客服端配置，是否前后端分离，用于单点登录的地址跳转。forestage为false时，host和port可以不写
+      # 客服端配置，是否前后端分离，用于单点登录的地址跳转。forestage为false时，host和port可以不写
       client:
         forestage: true
         host: localhost
