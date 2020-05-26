@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @TableName(value = "sys_user")
 public class SysUser {
@@ -65,6 +66,28 @@ public class SysUser {
      */
     @TableField(exist=false)
     private List<Long> roleIdList;
+
+    @TableField(exist=false)
+    private List<SysMenu> menuList;
+
+    @TableField(exist=false)
+    private Set<String> permissionList;
+
+    public List<SysMenu> getMenuList() {
+        return menuList;
+    }
+
+    public void setMenuList(List<SysMenu> menuList) {
+        this.menuList = menuList;
+    }
+
+    public Set<String> getPermissionList() {
+        return permissionList;
+    }
+
+    public void setPermissionList(Set<String> permissionList) {
+        this.permissionList = permissionList;
+    }
 
     public List<Long> getRoleIdList() {
         return roleIdList;

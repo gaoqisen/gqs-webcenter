@@ -2,7 +2,8 @@
 // Template version: 1.3.1
 // see http://vuejs-templates.github.io/webpack for documentation.
 
-const path = require('path')
+var path = require('path')
+var devEnv = require('./dev.env')
 
 module.exports = {
   dev: {
@@ -11,7 +12,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/proxyApi': {
+      '/proxyApi': devEnv.OPEN_PROXY === false ? {} : {
         target: 'http://localhost:8000/',
         changeOrigin: true,
         pathRewrite: {
@@ -46,10 +47,10 @@ module.exports = {
 
   build: {
     // Template for index.html
-    index: path.resolve(__dirname, '../dist/index.html'),
+    index: path.resolve(__dirname, '../../gqs-webcenter-console/src/main/resources/public/index.html'),
 
     // Paths
-    assetsRoot: path.resolve(__dirname, '../dist'),
+    assetsRoot: path.resolve(__dirname, '../../gqs-webcenter-console/src/main/resources/public'),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
 

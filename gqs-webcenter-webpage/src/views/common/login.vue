@@ -74,7 +74,7 @@
             if(clientId != null) {
               // 系统登录
               this.$http({
-                url: this.$http.adornUrl('/sso/login'),
+                url: this.$http.adornUrl('/main/sso/login'),
                 method: 'post',
                 data: this.$http.adornData({
                   'username': this.dataForm.userName,
@@ -86,7 +86,7 @@
                 })
               }).then(({data}) => {
                 if (data && data.code === 0) {
-                  window.location.href = this.$route.query.redirect+"?code="+data.code+"&clientId=" + clientId
+                  window.location.href = this.$route.query.redirect+"?code="+data.data+"&clientId=" + clientId
                 } else {
                   this.getCaptcha()
                   this.$message.error(data.msg)

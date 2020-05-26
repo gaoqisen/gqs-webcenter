@@ -1,25 +1,31 @@
 server:
   port: 8000
 spring:
-  # RestController返回json格式
+  application:
+    name: webcenter-console
+  # 返回json格式
   jackson:
     default-property-inclusion: non_null
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
-  application:
-    name: webcenter-console
+  ### redis配置
   redis:
     host: localhost
     password: 123456
     port: 6379
     timeout: 60000
+  ### 数据库配置
   datasource:
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/bsp?characterEncoding=utf8&useSSL=false
 mybatis:
-  #注意：一定要对应mapper映射xml文件的所在路径
   mapper-locations: classpath:mapping/*.xml
-  # 注意：对应实体类的路径
   type-aliases-package: com.gaoqisen.webcenter.entity
+webcenter:
+  client:
+    ### 前后端分离：true表示前后端分离，用于单点登录时重定向到前端的地址。false表示非前后端分离，可以不用配置host和prot
+    forestage: true
+    host: localhost
+    port: 8080

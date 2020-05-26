@@ -132,6 +132,11 @@
       },
       // 系统单选框选择
       refreshListFun () {
+        var restList = this.checkedStatus[this.currentStatus.applicationName].restCheck
+        if(restList === undefined) {
+          restList = []
+        }
+        this.checkedRests = restList
         this.$refs.menuListTree.setCheckedKeys(this.checkedStatus[this.currentStatus.applicationName].menuCheck)
       },
       // 获取所有系统信息

@@ -13,16 +13,16 @@ import { isURL } from '@/utils/validate'
 Vue.use(Router)
 
 // 开发环境不使用懒加载, 因为懒加载页面太多的话会造成webpack热更新太慢, 所以只有生产环境使用懒加载
-const _import = require('./import-' + process.env.NODE_ENV)
+var _import = require('./import-' + process.env.NODE_ENV)
 
 // 全局路由(无需嵌套上左右整体布局)
-const globalRoutes = [
+var globalRoutes = [
  // { path: '/404', component: _import('common/404'), name: '404', meta: { title: '404未找到' } },
   { path: '/login', component: _import('common/login'), name: 'login', meta: { title: '登录' } }
 ]
 
 // 主入口路由(需嵌套上左右整体布局)
-const mainRoutes = {
+var mainRoutes = {
   path: '/',
   component: _import('main'),
   name: 'main',
@@ -45,7 +45,7 @@ const mainRoutes = {
   }
 }
 
-const router = new Router({
+var router = new Router({
   mode: 'hash',
   scrollBehavior: () => ({ y: 0 }),
   isAddDynamicMenuRoutes: false, // 是否已经添加动态(菜单)路由
@@ -128,7 +128,6 @@ function fnAddDynamicMenuRoutes (menuList = [], routes = []) {
         route['meta']['iframeUrl'] = menuList[i].url
       } else {
         try {
-          console.log(menuList[i].url)
           route['component'] = _import(`${menuList[i].url}`) || null
         } catch (e) {}
       }

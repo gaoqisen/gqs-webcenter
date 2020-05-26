@@ -72,7 +72,7 @@ Webpack4.0.0+
     gqs-webcenter-component // 通用组件
     gqs-webcenter-console // 控制台，需要编译打包的模块
     gqs-webcenter-sample // 简单的客服端例子
-    gqs-webcenter-service // 生成的
+    gqs-webcenter-service // 服务层，数据访问层
     gqs-webcenter-webpage // 前端项目,build之后将静态文件打包到了 gqs-webcenter-console的resource/public里面
     ```
 3. 部署成功之后访问http://localhost:8000， 出现如下页面表示部署成功。默认登录账号admin,登录密码admin。
@@ -122,104 +122,104 @@ Webpack4.0.0+
 
 #### 2.3.1 客服端后端使用
 
-- maven引入
+- maven引入，暂时是快照版本，需要先添加maven的快照仓库地址
 
     ```
     <dependency>
-            <groupId>com.github.gaoqisen</groupId>
-            <artifactId>gqs-webcenter-client</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-        </dependency>
+        <groupId>com.github.gaoqisen</groupId>
+        <artifactId>gqs-webcenter-client</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </dependency>
     ```
 - application.yml配置文件添加配置
 
-    ```yml
+    ```
     spring:
-  jackson:
-    default-property-inclusion: non_null
-    date-format: yyyy-MM-dd HH:mm:ss
-    time-zone: GMT+8
-  application:
-    name: webcenter-sample
-  ### 需要和服务端的redis是同一个
-  redis:
-    host: localhost
-    password: 123456
-    port: 6379
-    timeout: 60000
-webcenter:
-  # 服务端
-  server:
-    host: localhost
-    port: 8000
-    clientid: WZUIIXWZUIIX
-    secretkey: qOIWRbzeFvOnXUYTspfSt2ibfJPe1vtG
-  ### 客服端配置，是否前后端分离，用于单点登录的地址跳转。forestage为false时，host和port可以不写
-  client:
-    forestage: true
-    host: localhost
-    port: 8081
+      jackson:
+        default-property-inclusion: non_null
+        date-format: yyyy-MM-dd HH:mm:ss
+        time-zone: GMT+8
+      application:
+        name: webcenter-sample
+      ### 需要和服务端的redis是同一个
+      redis:
+        host: localhost
+        password: 123456
+        port: 6379
+        timeout: 60000
+    webcenter:
+      # 服务端
+      server:
+        host: localhost
+        port: 8000
+        clientid: WZUIIXWZUIIX
+        secretkey: qOIWRbzeFvOnXUYTspfSt2ibfJPe1vtG
+      ### 客服端配置，是否前后端分离，用于单点登录的地址跳转。forestage为false时，host和port可以不写
+      client:
+        forestage: true
+        host: localhost
+        port: 8081
     ```
 - config文件，用于将客户端交给spring管理
 
-    ```java
+    ```
     @Configuration
-public class WebCenterConfig extends WebMvcConfigurerAdapter {
-
-    @Bean
-    public SecurityInterceptor securityInterceptor() {
-        return new SecurityInterceptor();
-    }
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(securityInterceptor()).excludePathPatterns("/static/*")
-                .excludePathPatterns("/error").addPathPatterns("/**");
-
-    }
+    public class WebCenterConfig extends WebMvcConfigurerAdapter {
+    
         @Bean
-    @DependsOn("webCenterConsole")
-    public WebCenterClientBeanFactory springClientBeanFactory() {
-        return new WebCenterClientBeanFactory();
+        public SecurityInterceptor securityInterceptor() {
+            return new SecurityInterceptor();
+        }
+    
+        @Override
+        public void addInterceptors(InterceptorRegistry registry) {
+            registry.addInterceptor(securityInterceptor()).excludePathPatterns("/static/*")
+                    .excludePathPatterns("/error").addPathPatterns("/**");
+    
+        }
+            @Bean
+        @DependsOn("webCenterConsole")
+        public WebCenterClientBeanFactory springClientBeanFactory() {
+            return new WebCenterClientBeanFactory();
+        }
+    
+    
+        @Bean
+        public WebCenterInitializing webCenterInitializing() {
+            return new WebCenterInitializing();
+        }
+    
+        @Bean
+        public WebCenterConsole webCenterConsole(){
+            WebCenterConsole webCenterConsole = new WebCenterConsole();
+            return webCenterConsole;
+        }
+    
+        @Bean
+        @DependsOn("redisConnectionFactory")
+        public ApiController apiController() {
+            return new ApiController();
+        }
+    
+        @Bean
+        public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+            StringRedisTemplate template = new StringRedisTemplate(redisConnectionFactory);
+            Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
+            ObjectMapper om = new ObjectMapper();
+            om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+            om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+            jackson2JsonRedisSerializer.setObjectMapper(om);
+            template.setValueSerializer(jackson2JsonRedisSerializer);
+            template.afterPropertiesSet();
+            return template;
+        }
     }
-
-
-    @Bean
-    public WebCenterInitializing webCenterInitializing() {
-        return new WebCenterInitializing();
-    }
-
-    @Bean
-    public WebCenterConsole webCenterConsole(){
-        WebCenterConsole webCenterConsole = new WebCenterConsole();
-        return webCenterConsole;
-    }
-
-    @Bean
-    @DependsOn("redisConnectionFactory")
-    public ApiController apiController() {
-        return new ApiController();
-    }
-
-    @Bean
-    public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        StringRedisTemplate template = new StringRedisTemplate(redisConnectionFactory);
-        Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
-        ObjectMapper om = new ObjectMapper();
-        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
-        jackson2JsonRedisSerializer.setObjectMapper(om);
-        template.setValueSerializer(jackson2JsonRedisSerializer);
-        template.afterPropertiesSet();
-        return template;
-    }
-}
     ```
     
 #### 2.3.2 客服端前端使用
 
 ```
-// 全局按照webcenter客服端脚手架
+// 全局安装webcenter客服端脚手架
 npm install webc -g
 // 按照成功之后执行webc命令, 查看是否安装成功
 webc 

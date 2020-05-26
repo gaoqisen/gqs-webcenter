@@ -16,4 +16,7 @@
     <!--@mbg.generated-->
     id, user_id, `name`, remark, create_time, client_id, secret_key, application_name
   </sql>
+  <select id="sysStatisticsl" >
+    select count(1) num, 'user' tableName from sys_user union select count(1) num, 'sys' tableName from sys_code
+  </select>
 </mapper>

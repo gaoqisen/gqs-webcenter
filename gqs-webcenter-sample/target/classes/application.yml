@@ -1,16 +1,29 @@
 server:
   port: 8001
+  servlet:
+    context-path: /gaoqisen
 spring:
-  # RestController返回json格式
   jackson:
     default-property-inclusion: non_null
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
   application:
     name: webcenter-sample
+  ### 需要和服务端的redis是同一个
+  redis:
+    host: localhost
+    password: 123456
+    port: 6379
+    timeout: 60000
 webcenter:
+  # 服务端
   server:
-    host : localhost
+    host: localhost
     port: 8000
     clientid: WZUIIXWZUIIX
     secretkey: qOIWRbzeFvOnXUYTspfSt2ibfJPe1vtG
+  ### 客服端配置，是否前后端分离，用于单点登录的地址跳转。forestage为false时，host和port可以不写
+  client:
+    forestage: true
+    host: localhost
+    port: 8081

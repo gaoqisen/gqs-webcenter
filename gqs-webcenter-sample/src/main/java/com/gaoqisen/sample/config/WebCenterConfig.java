@@ -1,52 +1,44 @@
 package com.gaoqisen.sample.config;
 
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.gaoqisen.webcenter.api.ApiController;
+import com.github.gaoqisen.webcenter.core.SecurityInterceptor;
 import com.github.gaoqisen.webcenter.core.WebCenterClientBeanFactory;
 import com.github.gaoqisen.webcenter.core.WebCenterInitializing;
 import com.github.gaoqisen.webcenter.pojo.WebCenterConsole;
-import com.github.gaoqisen.webcenter.shiro.MyShiroRealm;
-import com.github.gaoqisen.webcenter.shiro.ShiroConfigUtils;
-import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
-import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
-import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
-import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
-public class WebCenterConfig {
-
-
-    @Value("${webcenter.server.host}")
-    private String host;
-
-    @Value("${webcenter.server.port}")
-    private String port;
-
-    @Value("${webcenter.server.clientid}")
-    private String clientId;
-
-    @Value("${webcenter.server.secretkey}")
-    private String secretKey;
-
-    @Value("${spring.application.name}")
-    private String applicationName;
-
+public class WebCenterConfig extends WebMvcConfigurerAdapter {
 
     @Bean
+    public SecurityInterceptor securityInterceptor() {
+        return new SecurityInterceptor();
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(securityInterceptor()).excludePathPatterns("/static/*")
+                .excludePathPatterns("/error").addPathPatterns("/**");
+
+    }
+        @Bean
     @DependsOn("webCenterConsole")
     public WebCenterClientBeanFactory springClientBeanFactory() {
         return new WebCenterClientBeanFactory();
     }
 
-    @Bean
-    @DependsOn("springClientBeanFactory")
-    public ShiroFilterFactoryBean shiroFilter(DefaultWebSecurityManager defaultWebSecurityManager) {
-        return new ShiroConfigUtils().getShiroFilter(defaultWebSecurityManager);
-    }
 
     @Bean
     public WebCenterInitializing webCenterInitializing() {
@@ -56,59 +48,25 @@ public class WebCenterConfig {
     @Bean
     public WebCenterConsole webCenterConsole(){
         WebCenterConsole webCenterConsole = new WebCenterConsole();
-        webCenterConsole.setHost(host);
-        webCenterConsole.setPort(port);
-        webCenterConsole.setClientId(clientId);
-        webCenterConsole.setSecretKey(secretKey);
-        webCenterConsole.setCurrentApplicationName(applicationName);
         return webCenterConsole;
     }
 
     @Bean
+    @DependsOn("redisConnectionFactory")
     public ApiController apiController() {
         return new ApiController();
     }
 
-    /**
-     * 凭证匹配器
-     * （由于我们的密码校验交给Shiro的SimpleAuthenticationInfo进行处理了
-     * ）
-     * @return
-     */
     @Bean
-    public HashedCredentialsMatcher hashedCredentialsMatcher(){
-        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
-        //散列算法:这里使用MD5算法;
-        hashedCredentialsMatcher.setHashAlgorithmName("md5");
-        //散列的次数，比如散列两次，相当于 md5(md5(""));
-        hashedCredentialsMatcher.setHashIterations(2);
-        return hashedCredentialsMatcher;
-    }
-
-    @Bean
-    public MyShiroRealm myShiroRealm(){
-        MyShiroRealm myShiroRealm = new MyShiroRealm();
-        return myShiroRealm;
-    }
-
-
-    @Bean
-    public DefaultWebSecurityManager securityManager(){
-        DefaultWebSecurityManager securityManager =  new DefaultWebSecurityManager();
-        securityManager.setRealm(myShiroRealm());
-        return securityManager;
-    }
-
-    /**
-     *  开启shiro aop注解支持.
-     *  使用代理方式;所以需要开启代码支持;
-     * @param securityManager
-     * @return
-     */
-    @Bean
-    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(DefaultWebSecurityManager securityManager){
-        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
-        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
-        return authorizationAttributeSourceAdvisor;
+    public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        StringRedisTemplate template = new StringRedisTemplate(redisConnectionFactory);
+        Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
+        ObjectMapper om = new ObjectMapper();
+        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+        jackson2JsonRedisSerializer.setObjectMapper(om);
+        template.setValueSerializer(jackson2JsonRedisSerializer);
+        template.afterPropertiesSet();
+        return template;
     }
 }

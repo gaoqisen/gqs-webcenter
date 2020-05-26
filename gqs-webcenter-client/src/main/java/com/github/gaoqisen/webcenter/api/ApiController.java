@@ -3,7 +3,6 @@ package com.github.gaoqisen.webcenter.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.gaoqisen.webcenter.constant.ServerContextConstant;
-import com.github.gaoqisen.webcenter.constant.SysPrompt;
 import com.github.gaoqisen.webcenter.http.HttpUtil;
 import com.github.gaoqisen.webcenter.pojo.Result;
 import com.github.gaoqisen.webcenter.pojo.SysUser;

@@ -11,12 +11,15 @@
 .sts4-cache
 
 ### IntelliJ IDEA ###
+.DS_Store
+*.DS_Store
 .idea
 *.iws
 *.iml
 *.ipr
 *.log
 .mvn
+*/target/
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/

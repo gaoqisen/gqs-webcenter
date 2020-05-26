@@ -1,7 +1,9 @@
 package com.gaoqisen.webcenter.shiro;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gaoqisen.webcenter.entity.SysUser;
+import com.gaoqisen.webcenter.service.SysMenuService;
 import com.gaoqisen.webcenter.service.SysRestService;
 import com.gaoqisen.webcenter.service.SysUserService;
 import org.apache.shiro.authc.*;
@@ -12,6 +14,9 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
+
+import java.util.concurrent.TimeUnit;
 
 public class MyShiroRealm  extends AuthorizingRealm {
 
@@ -24,6 +29,12 @@ public class MyShiroRealm  extends AuthorizingRealm {
     @Value("${spring.application.name}")
     private String springApplicationName;
 
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    private SysMenuService sysMenuService;
+
     /**
      *登录认证
      */
@@ -32,11 +43,7 @@ public class MyShiroRealm  extends AuthorizingRealm {
         //获取用户的输入的账号
         String username = (String) token.getPrincipal();
         String password = new String((char[]) token.getCredentials());
-        //实际项目中，这里可以根据实际情况做缓存，如果不做，Shiro自己也是有时间间隔机制，2分钟内不会重复执行该方法
         SysUser sysUser = sysUserService.getOne(new QueryWrapper<SysUser>().eq("username", username));
-        if(sysUser == null){
-            return null;
-        }
         //账号不存在
         if(sysUser == null) {
             throw new UnknownAccountException("账号或密码不正确");

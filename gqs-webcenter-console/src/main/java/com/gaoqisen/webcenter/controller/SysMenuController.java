@@ -1,5 +1,6 @@
 package com.gaoqisen.webcenter.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gaoqisen.webcenter.constant.Constant;
 import com.gaoqisen.webcenter.exception.AppException;
@@ -14,8 +15,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Set;
 
@@ -41,15 +44,33 @@ public class SysMenuController {
     @Value("${spring.application.name}")
     private String springApplicationName;
 
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
     @GetMapping(value = "nav")
-    public Result navigation() {
-        SysUser sysUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
+    @ApiOperation("菜单信息获取")
+    public Result navigation(HttpServletRequest httpServletRequest) {
+        SysUser sysUser = getSysUserBySessionId(httpServletRequest.getSession().getId());
+        if(sysUser == null) {
+            // 未获取到用户信息，判断为其他系统登出，当前系统也登出
+            SecurityUtils.getSubject().logout();
+        }
         // 通userId和应用名获取菜单
         List<SysMenu> sysMenuList = sysMenuService.queryMenuByUserIdAndApplicationName(sysUser.getUserId(),springApplicationName);
         // 通过userId和应用名获取用户权限
         Set<String> stringSet = sysRestService.getUrlByUserIdAndApplicationName(sysUser.getUserId(),springApplicationName);
         return Result.success().put("menuList", sysMenuList).put("permList", stringSet);
     }
+
+    private SysUser getSysUserBySessionId(String sessionId) {
+        String redisLoginKey = springApplicationName.toUpperCase().concat(sessionId);
+        String redisUserInfo = stringRedisTemplate.opsForValue().get(redisLoginKey);
+        if(redisUserInfo == null || redisUserInfo.isEmpty()) {
+            return null;
+        }
+        return JSONObject.parseObject(redisUserInfo, SysUser.class);
+    }
+
 
     @ApiOperation("获取菜单列表")
     @RequestMapping(value = "list", method = RequestMethod.GET)
