@@ -1,6 +1,7 @@
 package com.github.gaoqisen.webcenter.core;
 
 import com.alibaba.fastjson.JSON;
+import com.github.gaoqisen.webcenter.constant.RedisKeyConstant;
 import com.github.gaoqisen.webcenter.constant.ServerContextConstant;
 import com.github.gaoqisen.webcenter.http.HttpUtil;
 import com.github.gaoqisen.webcenter.pojo.SysRest;
@@ -9,6 +10,8 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
@@ -22,6 +25,9 @@ import java.util.Map;
 public class WebCenterInitializing implements InitializingBean {
 
     Logger logger = LoggerFactory.getLogger(getClass());
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -56,8 +62,7 @@ public class WebCenterInitializing implements InitializingBean {
             sysRest.setApplicationName(webCenterConsole.getCurrentApplicationName());
             restList.add(sysRest);
         }
-        String resultData = HttpUtil.hostPortSendPost(webCenterConsole.getHost(), webCenterConsole.getPort(),
-                ServerContextConstant.API_SYS_REST_SAVES, JSON.toJSONString(restList));
-        logger.info(resultData);
+        stringRedisTemplate.opsForList().leftPush(RedisKeyConstant.RESTDATASET, JSON.toJSONString(restList));
+        logger.info("redis list push success.");
     }
 }

@@ -2,8 +2,10 @@ package com.github.gaoqisen.webcenter.api;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.gaoqisen.webcenter.constant.RedisKeyConstant;
 import com.github.gaoqisen.webcenter.constant.ServerContextConstant;
 import com.github.gaoqisen.webcenter.http.HttpUtil;
+import com.github.gaoqisen.webcenter.pojo.PasswordForm;
 import com.github.gaoqisen.webcenter.pojo.Result;
 import com.github.gaoqisen.webcenter.pojo.SysUser;
 import com.github.gaoqisen.webcenter.pojo.WebCenterConsole;
@@ -12,10 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,6 +35,27 @@ public class ApiController {
 
     @Value("${server.servlet.context-path}")
     private String contextPath;
+
+    @ApiOperation("修改密码")
+    @PostMapping("password")
+    public Result password(@RequestBody PasswordForm passwordForm,HttpServletRequest request) {
+        String sessionId = request.getSession().getId();
+        SysUser sysUser = getSysUserBySessionId(sessionId);
+        if(sysUser == null) {
+            return Result.error("获取用户失败");
+        }
+        String pass = DigestUtils.getDigest(passwordForm.getPassword() + sysUser.getSalt());
+        if(!sysUser.getPassword().equals(pass)) {
+            return Result.error("旧密码错误");
+        }
+        // 通过redis的队列异步修改
+        JSONObject param = new JSONObject();
+        param.put("userId", sysUser.getUserId());
+        param.put("newPassword", DigestUtils.getDigest(passwordForm.getNewPassword() + sysUser.getSalt()));
+        param.put("password", DigestUtils.getDigest(passwordForm.getPassword() + sysUser.getSalt()));
+        stringRedisTemplate.opsForList().leftPush(RedisKeyConstant.PASSWORDSET, param.toJSONString());
+        return Result.success();
+    }
 
     @PostMapping("logout")
     @ApiOperation("退出功能")

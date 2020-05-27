@@ -19,7 +19,7 @@ spring:
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/bsp?characterEncoding=utf8&useSSL=false
+    url: jdbc:mysql://localhost:3306/webcenter?characterEncoding=utf8&useSSL=false
 mybatis:
   mapper-locations: classpath:mapping/*.xml
   type-aliases-package: com.gaoqisen.webcenter.entity
@@ -29,3 +29,6 @@ webcenter:
     forestage: true
     host: localhost
     port: 8080
+  ### 定时消费redis list
+  scheduled:
+    cron: 0 0/1 * * * ?

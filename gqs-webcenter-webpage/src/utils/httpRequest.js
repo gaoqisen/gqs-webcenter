@@ -40,7 +40,7 @@ http.interceptors.response.use(response => {
  */
 http.adornUrl = (actionName) => {
   // 非生产环境 && 开启代理, 接口前缀统一使用[/proxyApi/]前缀做代理拦截!  (process.env.NODE_ENV !== 'production' && process.env.OPEN_PROXY ? '/proxyApi/' : window.SITE_CONFIG.baseUrl)
-  var address = '/proxyApi/'
+  var address = '/proxyApi'
   if (process.env.NODE_ENV === 'production' || !process.env.OPEN_PROXY) {
     address = window.location.href.split("/").slice("0","3").join("/")
   }
@@ -58,6 +58,7 @@ http.adornParams = (params = {}) => {
  * post请求数据处理
  */
 http.adornData = (data = {}, contentType = 'json') => {
+  console.log(data)
   return contentType === 'json' ? JSON.stringify(data) : qs.stringify(data)
 }
 

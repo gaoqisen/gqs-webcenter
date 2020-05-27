@@ -37,7 +37,6 @@
 </template>
 
 <script>
-  //import { getUUID } from '@/utils'
   export default {
     data () {
       return {
@@ -179,13 +178,14 @@
       opacity: .6;
     }
     .login-main {
-      position: absolute;
-      top: 80px;
-      right: 50px;
       padding: 40px 50px 50px;
       width: 350px;
       height: 400px;
       background-color: #fff;
+      position: absolute;
+      right: 200px;
+      top: 50%;
+      transform: translate(10%,-50%);
     }
     .login-title {
       font-size: 16px;

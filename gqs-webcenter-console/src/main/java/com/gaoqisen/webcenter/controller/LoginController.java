@@ -213,7 +213,8 @@ public class LoginController {
         SysUser user = sysUserService.getOne(new QueryWrapper<SysUser>().eq("username", loginForm.getUsername()));
 
         //账号不存在、密码错误
-        if(user == null || !user.getPassword().equals(new Sha256Hash(loginForm.getPassword(), user.getSalt()).toHex())) {
+        String cpass = DigestUtils.getDigest(loginForm.getPassword() + user.getSalt());
+        if(user == null || !user.getPassword().equals(cpass)) {
             return Result.error("账号或密码不正确");
         }
 

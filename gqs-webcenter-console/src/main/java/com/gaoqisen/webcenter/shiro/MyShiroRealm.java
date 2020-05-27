@@ -6,6 +6,7 @@ import com.gaoqisen.webcenter.entity.SysUser;
 import com.gaoqisen.webcenter.service.SysMenuService;
 import com.gaoqisen.webcenter.service.SysRestService;
 import com.gaoqisen.webcenter.service.SysUserService;
+import com.gaoqisen.webcenter.utils.DigestUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -50,7 +51,8 @@ public class MyShiroRealm  extends AuthorizingRealm {
         }
 
         //密码错误
-        if(!new Sha256Hash(password, sysUser.getSalt()).toHex().equals(sysUser.getPassword())) {
+        String cpass = DigestUtils.getDigest(password + sysUser.getSalt());
+        if(!cpass.equals(sysUser.getPassword())) {
             throw new IncorrectCredentialsException("账号或密码不正确");
         }
 

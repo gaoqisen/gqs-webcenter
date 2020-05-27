@@ -16,7 +16,7 @@
     <!--@mbg.generated-->
     id, user_id, `name`, remark, create_time, client_id, secret_key, application_name
   </sql>
-  <select id="sysStatisticsl" >
-    select count(1) num, 'user' tableName from sys_user union select count(1) num, 'sys' tableName from sys_code
+  <select id="sysStatisticsl" resultType="map">
+    select (select count(1) num from sys_user) user , (select count(1) num from sys_code) sys, (select count(1) num from sys_role) role
   </select>
 </mapper>

@@ -1,5 +1,3 @@
-
-
 package com.gaoqisen.webcenter.config;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;

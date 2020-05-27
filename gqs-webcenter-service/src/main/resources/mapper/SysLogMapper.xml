@@ -17,4 +17,10 @@
     <!--@mbg.generated-->
     id, username, `operation`, `method`, params, `time`, ip, create_date
   </sql>
+
+  <select id="statisticalUserLogin" parameterType="map" resultType="map">
+    select count(1) num, date_format(create_date, #{dateFormat}) timestamp
+    from sys_log where method = 'LoginController.login' and create_date &gt; #{startTime} and create_date &lt; #{endTime} group by timestamp
+  </select>
+
 </mapper>

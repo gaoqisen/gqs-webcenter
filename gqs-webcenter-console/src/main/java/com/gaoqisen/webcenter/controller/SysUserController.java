@@ -7,6 +7,7 @@ import com.gaoqisen.webcenter.form.PasswordForm;
 import com.gaoqisen.webcenter.service.SysUserRoleService;
 import com.gaoqisen.webcenter.service.SysUserService;
 import com.gaoqisen.webcenter.utils.CurrentPage;
+import com.gaoqisen.webcenter.utils.DigestUtils;
 import com.gaoqisen.webcenter.utils.Result;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.ArrayUtils;
@@ -42,9 +43,9 @@ public class SysUserController {
 
         SysUser sysUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
         //sha256加密
-        String password = new Sha256Hash(passwordForm.getPassword(), sysUser.getSalt()).toHex();
+        String password = DigestUtils.getDigest(passwordForm.getPassword() + sysUser.getSalt());
         //sha256加密
-        String newPassword = new Sha256Hash(passwordForm.getNewPassword(), sysUser.getSalt()).toHex();
+        String newPassword = DigestUtils.getDigest(passwordForm.getNewPassword() + sysUser.getSalt());
 
         //更新密码
         boolean flag = sysUserService.updatePassword(sysUser.getUserId(), password, newPassword);
@@ -68,7 +69,7 @@ public class SysUserController {
         sysUser.setCreateTime(new Date());
         //sha256加密
         String salt = RandomStringUtils.randomAlphanumeric(20);
-        sysUser.setPassword(new Sha256Hash(sysUser.getPassword(), salt).toHex());
+        sysUser.setPassword(DigestUtils.getDigest(sysUser.getPassword() + salt));
         sysUser.setSalt(salt);
         this.sysUserService.save(sysUser);
         return Result.success();

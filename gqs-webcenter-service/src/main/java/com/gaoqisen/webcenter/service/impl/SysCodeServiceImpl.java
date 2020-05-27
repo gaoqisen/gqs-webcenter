@@ -6,8 +6,14 @@ import com.gaoqisen.webcenter.mapper.SysCodeMapper;
 import com.gaoqisen.webcenter.entity.SysCode;
 import com.gaoqisen.webcenter.service.SysCodeService;
 
+import java.util.Map;
+
 @Service
 public class SysCodeServiceImpl extends ServiceImpl<SysCodeMapper, SysCode> implements SysCodeService {
 
+    @Override
+    public Map<String, String> sysStatisticsl() {
+        return this.baseMapper.sysStatisticsl();
+    }
 }
 
