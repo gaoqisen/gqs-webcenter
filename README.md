@@ -57,14 +57,18 @@ Webpack4.0.0+
 
 ## 二、快速入门
 
-### 2.1 初始化数据库
+![https://gaoqisen.github.io/GraphBed/202005/20200527215308.png](https://gaoqisen.github.io/GraphBed/202005/20200527215308.png)
 
-请下载项目源码并解压，获取 “WebCenter数据库初始化SQL脚本(/db/webcenter.sql)” 并执行即可。
+### 2.1 运行Webcenter服务端
 
-### 2.2 安装服务端
+#### 2.1.1 基础组件依赖
 
 1. 服务端依赖Redis和Mysql，请先安装。
-2. 可以通过下载源码进行编译获取jar包，源码结构如下：
+2. 请下载项目源码并解压，获取 “WebCenter数据库初始化SQL脚本(/db/webcenter.sql)” 并执行。
+
+#### 2.1.2 获取源码并运行
+
+1. 可以通过下载源码进行编译获取jar包，源码结构如下：
     
     ```
      ──gqs-webcenter
@@ -81,16 +85,16 @@ Webpack4.0.0+
        ├── gqs-webcenter-webpage  // 前端项目,build之后将静态文件打包到了 gqs-webcenter-console的resource/public里面
        └── readme.md  // 项目介绍
     ```
-3. 部署成功之后访问http://localhost:8000， 出现如下页面表示部署成功。默认登录账号admin,登录密码admin。
+2. 部署成功之后访问http://localhost:8000， 出现如下页面表示部署成功。默认登录账号admin,登录密码admin。
         ![https://gaoqisen.github.io/GraphBed/202005/20200523232105.png](https://gaoqisen.github.io/GraphBed/202005/20200523232105.png)
-4. 也可以直接下载Release后的jar包进行安装。
+3. 也可以直接下载Release后的jar包进行安装。
     -  在启动命令时进行参数配置如：
     ```
         nohup java -Xms1024m -Xmx1024m -jar webcenter-console-1.0.0.jar --spring.database.username=root --spring.database.password=123456 --spring.redis.password=123456 >/dev/null 2>&1 &
     ```
     
-    - 或者在jar包同级目录下新建config目录并把下面的内容写在application.yml文件中进行mysql和redis的配置修改
-    ```yml
+    - 或者在jar包同级目录下新建config目录并把下面的配置写在application.yml文件中，mysql和redis的配置改成本地的。
+    ```
     server:
       port: 8000
     spring:
@@ -124,11 +128,9 @@ Webpack4.0.0+
         port: 8080
     ```
     
-### 2.3 客服端使用
+### 2.2 创建Maven后端
 
-#### 2.3.1 客服端后端使用
-
-- maven引入，暂时是快照版本，需要先添加maven的快照仓库地址
+1. Maven引入依赖
 
     ```
     <dependency>
@@ -136,23 +138,8 @@ Webpack4.0.0+
         <artifactId>gqs-webcenter-client</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </dependency>
-  
-    # 因为是快照版本，因此需要引入快照版本仓库
-    <repositories>
-      <repository>
-        <id>sonatypeSnapshots</id>
-        <name>Sonatype Snapshots</name>
-        <releases>
-          <enabled>false</enabled>
-        </releases>
-        <snapshots>
-          <enabled>true</enabled>
-        </snapshots>
-        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-      </repository>
-    </repositories>
     ```
-- application.yml配置文件添加配置
+2. 添加application.yml的配置
 
     ```
     spring:
@@ -181,7 +168,7 @@ Webpack4.0.0+
         host: localhost
         port: 8081
     ```
-- config文件，用于将客户端交给spring管理
+3. 创建WebCenterConfig.java文件，用于将客户端交给spring管理
 
     ```
     @Configuration
@@ -198,7 +185,7 @@ Webpack4.0.0+
                     .excludePathPatterns("/error").addPathPatterns("/**");
     
         }
-            @Bean
+        @Bean
         @DependsOn("webCenterConsole")
         public WebCenterClientBeanFactory springClientBeanFactory() {
             return new WebCenterClientBeanFactory();
@@ -237,7 +224,7 @@ Webpack4.0.0+
     }
     ```
     
-#### 2.3.2 客服端前端使用
+#### 2.3 创建Vue前端
 
 ```
 // 全局安装webcenter客服端脚手架
@@ -250,27 +237,33 @@ webc list
 webc init webcenter test
 ```
 
-项目引入的插件，其他可以在package.json里面查看。
+- Vue项目引入的主要插件。
 
-| 名称 | 介绍 | 版本 |
+    | 名称 | 介绍 | 版本 |
+    | --- | --- | --- |
+    | element-ui | 饿了么后端UI框架 | 2.8.2 |
+    |fortawesome | 图标库 | 5.13 |
+    |vue-router | 路由 | 3.0.7 |
+    |vue-cookie | cookie管理| 1.1.4 |
+    |vuex | 状态管理 | 3.3.0 |
+    |axios | HTTP库|0.19.2 |
+
+## 三、功能介绍
+
+- WebCenter服务端启动之后，提供单点登录、动态菜单、动态权限功能。新建的SpringBoot项目依赖了webcenter-client.jar后集成服务端功能，客服端与服务端之间的通信通过Redis的异步消息队列实现。
+- 前端Vue通过npm搭建了一个脚手架，通过webc初始化项目之后，自动实现了动态路由，菜单直接在服务端的菜单管理里面进行配置。
+
+## 四、数据库结构
+
+
+| 名称 | 表名 |描述  |
 | --- | --- | --- |
-| element-ui | 饿了么后端UI框架 | 2.8.2 |
-|fortawesome | 图标库 | 5.13 |
-|vue-router | 路由 | 3.0.7 |
-|vue-cookie | cookie管理| 1.1.4 |
-|vuex | 状态管理 | 3.3.0 |
-|axios | HTTP库|0.19.2 |
-
-## 三、服务端数据库结构
-
-```
-sys_code // 系统编码表
-sys_code_menu // 系统菜单关联表
-sys_menu // 菜单表
-sys_rest  // rest接口表
-sys_role // 角色表
-sys_role_menu // 角色菜单关联表
-sys_role_rest // 角色接口关联表
-sys_user // 用户表
-sys_user_role // 角色表
-```
+|sys_code | 系统编码表| 用来保存系统信息、clientId、密匙等 |
+|sys_code_menu | 系统菜单关联表| 系统和菜单的对应关系 |
+|sys_menu | 菜单表| 保存菜单和目录信息 |
+|sys_rest  | rest接口表| 保存各个系统的REST接口和权限 |
+|sys_role | 角色表| 角色的相关信息 |
+|sys_role_menu | 角色菜单关联表| 角色可以查看的菜单 |
+|sys_role_rest | 角色接口关联表| 角色可以访问的接口 |
+|sys_user | 用户表| 用户的相关信息 |
+|sys_user_role| 角色表| 用户关联的角色，一个用户对应多个角色 |
