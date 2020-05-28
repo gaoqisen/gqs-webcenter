@@ -47,13 +47,13 @@ WebCenter是一个简单的权限管理小工具，目的是为了简化开发�
 | 前端 | https://github.com/gaoqisen/webcenter-vue-cli |
 
 
-### 1.4 环境
+### 1.5 环境
 
-Maven3+
-Jdk1.8+
-Mysql5.7+
-Vue3.10.0+
-Webpack4.0.0+
+Maven3+ 
+Jdk1.8+ 
+Mysql5.7+ 
+Vue3.10.0+ 
+Webpack4.0.0+ 
 
 ## 二、快速入门
 
@@ -136,8 +136,23 @@ Webpack4.0.0+
     <dependency>
         <groupId>com.github.gaoqisen</groupId>
         <artifactId>gqs-webcenter-client</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0</version>
     </dependency>
+    
+    # 发布版本(如果没有oss.sonatype.org仓库的话，需要添加仓库)
+    <repositories>
+      <repository>
+        <id>sonatypeSnapshots</id>
+        <name>Sonatype Release</name>
+        <releases>
+          <enabled>true</enabled>
+        </releases>
+        <snapshots>
+          <enabled>false</enabled>
+        </snapshots>
+        <url>https://oss.sonatype.org/content/groups/public</url>
+      </repository>
+    </repositories>
     ```
 2. 添加application.yml的配置
 
@@ -229,7 +244,7 @@ Webpack4.0.0+
 ```
 // 全局安装webcenter客服端脚手架
 npm install webc -g
-// 按照成功之后执行webc命令, 查看是否安装成功
+// 安装成功之后执行webc命令, 查看是否安装成功
 webc 
 // 查看所有的脚手架
 webc list
@@ -250,11 +265,32 @@ webc init webcenter test
 
 ## 三、功能介绍
 
-- WebCenter服务端启动之后，提供单点登录、动态菜单、动态权限功能。新建的SpringBoot项目依赖了webcenter-client.jar后集成服务端功能，客服端与服务端之间的通信通过Redis的异步消息队列实现。
-- 前端Vue通过npm搭建了一个脚手架，通过webc初始化项目之后，自动实现了动态路由，菜单直接在服务端的菜单管理里面进行配置。
+> 完成上面的搭建之后，启动Maven后端和Vue前端就可以直接开发自己的业务逻辑了。
+
+### 3.1 系统配置
+
+给各个系统分配clientId和密匙，应用名称必须和客户端的spring.application.name一致。
+
+### 3.2 权限配置
+
+权限配置在新建角色的时候进行配置，如果需要修改权限要在修改角色里面进行修改（修改操作是将之前角色和权限的关联信息全部删除之后，新增选择的权限）。修改角色的权限之后，需要用户退出后重新登陆生效。前端的页面权限用如下代码实现：
+
+```
+// 权限将斜杠改为冒号即可。@PathVariable类型的接口去掉/{*}如:
+// sys/menu/save, sys:menu:save
+// sys/menu/info/{id}, sys:menu:info
+<el-button v-if="isAuth('sys:menu:save')" >新增</el-button>
+```
+
+### 3.3 菜单配置
+
+菜单分为目录和菜单两种，需要单独给每个系统添加菜单和目录，目录可以多层级。路由就是创建的.vue文件的路径。如:/sys/log, 就在views/sys里面创建log.vue。动态路由就会自动路由到log.vue里面。
+
+### 3.4 REST接口配置
+
+rest接口有3种权限：公开、登录、权限。客户端启动之后自动注册接口到服务端默认为公开所有人都可以访问的权限。改为登录接口之后，访问的权限就必须登录之后才可以访问。需要权限的接口级别最高必须在权限里面给角色配置了权限才可以访问。
 
 ## 四、数据库结构
-
 
 | 名称 | 表名 |描述  |
 | --- | --- | --- |
@@ -267,3 +303,12 @@ webc init webcenter test
 |sys_role_rest | 角色接口关联表| 角色可以访问的接口 |
 |sys_user | 用户表| 用户的相关信息 |
 |sys_user_role| 角色表| 用户关联的角色，一个用户对应多个角色 |
+
+## 五、问答
+
+1. SpringBoot项目依赖了webcenter-client.jar后集成了那些功能？
+    答:  提供了单点登录、动态菜单、动态权限功能。
+2. 前端Vue通过脚手架初始化之后有那些功能？
+    答：实现了动态路由，菜单直接在服务端的菜单管理里面进行配置。
+3. 客服端与服务端之间如何通信？
+    答: 之间的通信通过Redis的异步消息队列实现。
