@@ -130,6 +130,8 @@ Webpack4.0.0+
     
 ### 2.2 创建Maven后端
 
+> 创建出springBoot项目之后可以把配置文件改为yml格式，因为后面的配置都是基于yml的。如果需要用properties格式的话可以在https://www.toyaml.com/index.html 里面进行转换。创建成功之后引入maven依赖、添加配置、创建WebCenterConfig.java即可。
+
 1. Maven引入依赖
 
     ```
@@ -153,10 +155,54 @@ Webpack4.0.0+
         <url>https://oss.sonatype.org/content/groups/public</url>
       </repository>
     </repositories>
+    
+    
+    ### pom.xml测试用例
+    <?xml version="1.0" encoding="UTF-8"?>
+    <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    	<modelVersion>4.0.0</modelVersion>
+    	<parent>
+    		<groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-starter-parent</artifactId>
+    		<version>2.2.2.RELEASE</version>
+    		<relativePath/> <!-- lookup parent from repository -->
+    	</parent>
+    	<groupId>com.example</groupId>
+    	<artifactId>demo</artifactId>
+    	<version>0.0.1-SNAPSHOT</version>
+    	<name>demo</name>
+    	<description>Demo project for Spring Boot</description>
+    
+    	<properties>
+    		<java.version>1.8</java.version>
+    	</properties>
+    
+    	<dependencies>
+    		<dependency>
+    			<groupId>org.springframework.boot</groupId>
+    			<artifactId>spring-boot-starter-web</artifactId>
+    		</dependency>
+    		<dependency>
+    			<groupId>org.springframework.boot</groupId>
+    			<artifactId>spring-boot-starter-test</artifactId>
+    			<scope>test</scope>
+    		</dependency>
+    		<dependency>
+    			<groupId>com.github.gaoqisen</groupId>
+    			<artifactId>gqs-webcenter-client</artifactId>
+    			<version>1.0.0</version>
+    		</dependency>
+    	</dependencies>
+    </project>
     ```
 2. 添加application.yml的配置
 
     ```
+    server:
+      port: 8001
+      servlet:
+        context-path: /sample
     spring:
       jackson:
         default-property-inclusion: non_null
@@ -164,7 +210,7 @@ Webpack4.0.0+
         time-zone: GMT+8
       application:
         name: webcenter-sample
-      # 需要和服务端的redis是同一个
+      ### 需要和服务端的redis是同一个
       redis:
         host: localhost
         password: 123456
@@ -177,7 +223,7 @@ Webpack4.0.0+
         port: 8000
         clientid: WZUIIXWZUIIX
         secretkey: qOIWRbzeFvOnXUYTspfSt2ibfJPe1vtG
-      # 客服端配置，是否前后端分离，用于单点登录的地址跳转。forestage为false时，host和port可以不写
+      ### 客服端配置，是否前后端分离，用于单点登录的地址跳转。forestage为false时，host和port可以不写
       client:
         forestage: true
         host: localhost
@@ -227,12 +273,6 @@ Webpack4.0.0+
         @Bean
         public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
             StringRedisTemplate template = new StringRedisTemplate(redisConnectionFactory);
-            Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
-            ObjectMapper om = new ObjectMapper();
-            om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-            om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
-            jackson2JsonRedisSerializer.setObjectMapper(om);
-            template.setValueSerializer(jackson2JsonRedisSerializer);
             template.afterPropertiesSet();
             return template;
         }
@@ -243,25 +283,24 @@ Webpack4.0.0+
 
 ```
 // 全局安装webcenter客服端脚手架
-npm install webc -g
+npm install webc-cli -g
 // 安装成功之后执行webc命令, 查看是否安装成功
 webc 
 // 查看所有的脚手架
 webc list
-// 初始化一个名为test的前端项目（集成了动态菜单和单点登录）
-webc init webcenter test
+// 初始化一个名为sample的前端项目（集成了动态菜单和单点登录）
+webc init webcenter sample
 ```
 
 - Vue项目引入的主要插件。
 
-    | 名称 | 介绍 | 版本 |
-    | --- | --- | --- |
-    | element-ui | 饿了么后端UI框架 | 2.8.2 |
-    |fortawesome | 图标库 | 5.13 |
-    |vue-router | 路由 | 3.0.7 |
-    |vue-cookie | cookie管理| 1.1.4 |
-    |vuex | 状态管理 | 3.3.0 |
-    |axios | HTTP库|0.19.2 |
+    | 名称 | 介绍 | 版本 |地址|
+    | --- | --- | --- | --- |
+    | element-ui | 饿了么后端UI框架 | 2.8.2 |https://element.eleme.cn/2.8/#/zh-CN/component/installation|
+    |fortawesome | 图标库 | 5.13 |http://www.fontawesome.com.cn/faicons/|
+    |vue-router | 路由 | 3.0.7 |https://cn.vuejs.org/v2/guide/routing.html|
+    |vuex | 状态管理 | 3.3.0 |https://vuex.vuejs.org/zh/|
+    |axios | HTTP库|0.19.2 |http://www.axios-js.com/zh-cn/docs/|
 
 ## 三、功能介绍
 
