@@ -19,7 +19,7 @@
     </p>
 </p>
 
-## 一、简介
+## 一、简介.
 
 ### 1.1 概述
 
@@ -156,7 +156,6 @@ Webpack4.0.0+
       </repository>
     </repositories>
     
-    
     ### pom.xml测试用例
     <?xml version="1.0" encoding="UTF-8"?>
     <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -220,6 +219,7 @@ Webpack4.0.0+
       # 服务端
       server:
         host: localhost
+        # 如果服务端端口改了的话，此处的端口应保持一致
         port: 8000
         clientid: WZUIIXWZUIIX
         secretkey: qOIWRbzeFvOnXUYTspfSt2ibfJPe1vtG
@@ -227,7 +227,7 @@ Webpack4.0.0+
       client:
         forestage: true
         host: localhost
-        port: 8081
+        port: 8080
     ```
 3. 创建WebCenterConfig.java文件，用于将客户端交给spring管理
 
@@ -251,7 +251,6 @@ Webpack4.0.0+
         public WebCenterClientBeanFactory springClientBeanFactory() {
             return new WebCenterClientBeanFactory();
         }
-    
     
         @Bean
         public WebCenterInitializing webCenterInitializing() {
@@ -323,7 +322,7 @@ webc init webcenter sample
 
 ### 3.3 菜单配置
 
-菜单分为目录和菜单两种，需要单独给每个系统添加菜单和目录，目录可以多层级。路由就是创建的.vue文件的路径。如:/sys/log, 就在views/sys里面创建log.vue。动态路由就会自动路由到log.vue里面。
+菜单分为目录和菜单两种，需要单独给每个系统添加菜单和目录，目录可以多层级。路由就是创建的.vue文件的路径。如:/sys/log, 就在views/sys里面创建log.vue。动态路由就会自动路由到log.vue里面。菜单创建好之后需要给对应的角色赋予菜单权限，子系统退出后重新登录生效。
 
 ### 3.4 REST接口配置
 
