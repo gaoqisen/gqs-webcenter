@@ -47,24 +47,28 @@ WebCenter是一个简单的权限管理小工具，目的是为了简化开发�
 | 前端 | https://github.com/gaoqisen/webcenter-vue-cli |
 
 
-### 1.4 环境
+### 1.5 环境
 
-Maven3+
-Jdk1.8+
-Mysql5.7+
-Vue3.10.0+
-Webpack4.0.0+
+Maven3+ 
+Jdk1.8+ 
+Mysql5.7+ 
+Vue3.10.0+ 
+Webpack4.0.0+ 
 
 ## 二、快速入门
 
-### 2.1 初始化数据库
+![https://gaoqisen.github.io/GraphBed/202005/20200527215308.png](https://gaoqisen.github.io/GraphBed/202005/20200527215308.png)
 
-请下载项目源码并解压，获取 “WebCenter数据库初始化SQL脚本(/db/webcenter.sql)” 并执行即可。
+### 2.1 运行Webcenter服务端
 
-### 2.2 安装服务端
+#### 2.1.1 基础组件依赖
 
 1. 服务端依赖Redis和Mysql，请先安装。
-2. 可以通过下载源码进行编译获取jar包，源码结构如下：
+2. 请下载项目源码并解压，获取 “WebCenter数据库初始化SQL脚本(/db/webcenter.sql)” 并执行。
+
+#### 2.1.2 获取源码并运行
+
+1. 可以通过下载源码进行编译获取jar包，源码结构如下：
     
     ```
      ──gqs-webcenter
@@ -81,16 +85,16 @@ Webpack4.0.0+
        ├── gqs-webcenter-webpage  // 前端项目,build之后将静态文件打包到了 gqs-webcenter-console的resource/public里面
        └── readme.md  // 项目介绍
     ```
-3. 部署成功之后访问http://localhost:8000， 出现如下页面表示部署成功。默认登录账号admin,登录密码admin。
+2. 部署成功之后访问http://localhost:8000， 出现如下页面表示部署成功。默认登录账号admin,登录密码admin。
         ![https://gaoqisen.github.io/GraphBed/202005/20200523232105.png](https://gaoqisen.github.io/GraphBed/202005/20200523232105.png)
-4. 也可以直接下载Release后的jar包进行安装。
+3. 也可以直接下载Release后的jar包进行安装。
     -  在启动命令时进行参数配置如：
     ```
         nohup java -Xms1024m -Xmx1024m -jar webcenter-console-1.0.0.jar --spring.database.username=root --spring.database.password=123456 --spring.redis.password=123456 >/dev/null 2>&1 &
     ```
     
-    - 或者在jar包同级目录下新建config目录并把下面的内容写在application.yml文件中进行mysql和redis的配置修改
-    ```yml
+    - 或者在jar包同级目录下新建config目录并把下面的配置写在application.yml文件中，mysql和redis的配置改成本地的。
+    ```
     server:
       port: 8000
     spring:
@@ -124,37 +128,81 @@ Webpack4.0.0+
         port: 8080
     ```
     
-### 2.3 客服端使用
+### 2.2 创建Maven后端
 
-#### 2.3.1 客服端后端使用
+> 创建出springBoot项目之后可以把配置文件改为yml格式，因为后面的配置都是基于yml的。如果需要用properties格式的话可以在https://www.toyaml.com/index.html 里面进行转换。创建成功之后引入maven依赖、添加配置、创建WebCenterConfig.java即可。
 
-- maven引入，暂时是快照版本，需要先添加maven的快照仓库地址
+1. Maven引入依赖
 
     ```
     <dependency>
         <groupId>com.github.gaoqisen</groupId>
         <artifactId>gqs-webcenter-client</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0</version>
     </dependency>
-  
-    # 因为是快照版本，因此需要引入快照版本仓库
+    
+    # 发布版本(如果没有oss.sonatype.org仓库的话，需要添加仓库)
     <repositories>
       <repository>
         <id>sonatypeSnapshots</id>
-        <name>Sonatype Snapshots</name>
+        <name>Sonatype Release</name>
         <releases>
-          <enabled>false</enabled>
+          <enabled>true</enabled>
         </releases>
         <snapshots>
-          <enabled>true</enabled>
+          <enabled>false</enabled>
         </snapshots>
-        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        <url>https://oss.sonatype.org/content/groups/public</url>
       </repository>
     </repositories>
+    
+    
+    ### pom.xml测试用例
+    <?xml version="1.0" encoding="UTF-8"?>
+    <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    	<modelVersion>4.0.0</modelVersion>
+    	<parent>
+    		<groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-starter-parent</artifactId>
+    		<version>2.2.2.RELEASE</version>
+    		<relativePath/> <!-- lookup parent from repository -->
+    	</parent>
+    	<groupId>com.example</groupId>
+    	<artifactId>demo</artifactId>
+    	<version>0.0.1-SNAPSHOT</version>
+    	<name>demo</name>
+    	<description>Demo project for Spring Boot</description>
+    
+    	<properties>
+    		<java.version>1.8</java.version>
+    	</properties>
+    
+    	<dependencies>
+    		<dependency>
+    			<groupId>org.springframework.boot</groupId>
+    			<artifactId>spring-boot-starter-web</artifactId>
+    		</dependency>
+    		<dependency>
+    			<groupId>org.springframework.boot</groupId>
+    			<artifactId>spring-boot-starter-test</artifactId>
+    			<scope>test</scope>
+    		</dependency>
+    		<dependency>
+    			<groupId>com.github.gaoqisen</groupId>
+    			<artifactId>gqs-webcenter-client</artifactId>
+    			<version>1.0.0</version>
+    		</dependency>
+    	</dependencies>
+    </project>
     ```
-- application.yml配置文件添加配置
+2. 添加application.yml的配置
 
     ```
+    server:
+      port: 8001
+      servlet:
+        context-path: /sample
     spring:
       jackson:
         default-property-inclusion: non_null
@@ -162,7 +210,7 @@ Webpack4.0.0+
         time-zone: GMT+8
       application:
         name: webcenter-sample
-      # 需要和服务端的redis是同一个
+      ### 需要和服务端的redis是同一个
       redis:
         host: localhost
         password: 123456
@@ -175,13 +223,13 @@ Webpack4.0.0+
         port: 8000
         clientid: WZUIIXWZUIIX
         secretkey: qOIWRbzeFvOnXUYTspfSt2ibfJPe1vtG
-      # 客服端配置，是否前后端分离，用于单点登录的地址跳转。forestage为false时，host和port可以不写
+      ### 客服端配置，是否前后端分离，用于单点登录的地址跳转。forestage为false时，host和port可以不写
       client:
         forestage: true
         host: localhost
         port: 8081
     ```
-- config文件，用于将客户端交给spring管理
+3. 创建WebCenterConfig.java文件，用于将客户端交给spring管理
 
     ```
     @Configuration
@@ -198,7 +246,7 @@ Webpack4.0.0+
                     .excludePathPatterns("/error").addPathPatterns("/**");
     
         }
-            @Bean
+        @Bean
         @DependsOn("webCenterConsole")
         public WebCenterClientBeanFactory springClientBeanFactory() {
             return new WebCenterClientBeanFactory();
@@ -225,52 +273,81 @@ Webpack4.0.0+
         @Bean
         public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
             StringRedisTemplate template = new StringRedisTemplate(redisConnectionFactory);
-            Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
-            ObjectMapper om = new ObjectMapper();
-            om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-            om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
-            jackson2JsonRedisSerializer.setObjectMapper(om);
-            template.setValueSerializer(jackson2JsonRedisSerializer);
             template.afterPropertiesSet();
             return template;
         }
     }
     ```
     
-#### 2.3.2 客服端前端使用
+#### 2.3 创建Vue前端
 
 ```
 // 全局安装webcenter客服端脚手架
-npm install webc -g
-// 按照成功之后执行webc命令, 查看是否安装成功
+npm install webc-cli -g
+// 安装成功之后执行webc命令, 查看是否安装成功
 webc 
 // 查看所有的脚手架
 webc list
-// 初始化一个名为test的前端项目（集成了动态菜单和单点登录）
-webc init webcenter test
+// 初始化一个名为sample的前端项目（集成了动态菜单和单点登录）
+webc init webcenter sample
 ```
 
-项目引入的插件，其他可以在package.json里面查看。
+- Vue项目引入的主要插件。
 
-| 名称 | 介绍 | 版本 |
+    | 名称 | 介绍 | 版本 |地址|
+    | --- | --- | --- | --- |
+    | element-ui | 饿了么后端UI框架 | 2.8.2 |https://element.eleme.cn/2.8/#/zh-CN/component/installation|
+    |fortawesome | 图标库 | 5.13 |http://www.fontawesome.com.cn/faicons/|
+    |vue-router | 路由 | 3.0.7 |https://cn.vuejs.org/v2/guide/routing.html|
+    |vuex | 状态管理 | 3.3.0 |https://vuex.vuejs.org/zh/|
+    |axios | HTTP库|0.19.2 |http://www.axios-js.com/zh-cn/docs/|
+
+## 三、功能介绍
+
+> 完成上面的搭建之后，启动Maven后端和Vue前端就可以直接开发自己的业务逻辑了。
+
+### 3.1 系统配置
+
+给各个系统分配clientId和密匙，应用名称必须和客户端的spring.application.name一致。
+
+### 3.2 权限配置
+
+权限配置在新建角色的时候进行配置，如果需要修改权限要在修改角色里面进行修改（修改操作是将之前角色和权限的关联信息全部删除之后，新增选择的权限）。修改角色的权限之后，需要用户退出后重新登陆生效。前端的页面权限用如下代码实现：
+
+```
+// 权限将斜杠改为冒号即可。@PathVariable类型的接口去掉/{*}如:
+// sys/menu/save, sys:menu:save
+// sys/menu/info/{id}, sys:menu:info
+<el-button v-if="isAuth('sys:menu:save')" >新增</el-button>
+```
+
+### 3.3 菜单配置
+
+菜单分为目录和菜单两种，需要单独给每个系统添加菜单和目录，目录可以多层级。路由就是创建的.vue文件的路径。如:/sys/log, 就在views/sys里面创建log.vue。动态路由就会自动路由到log.vue里面。
+
+### 3.4 REST接口配置
+
+rest接口有3种权限：公开、登录、权限。客户端启动之后自动注册接口到服务端默认为公开所有人都可以访问的权限。改为登录接口之后，访问的权限就必须登录之后才可以访问。需要权限的接口级别最高必须在权限里面给角色配置了权限才可以访问。
+
+## 四、数据库结构
+
+| 名称 | 表名 |描述  |
 | --- | --- | --- |
-| element-ui | 饿了么后端UI框架 | 2.8.2 |
-|fortawesome | 图标库 | 5.13 |
-|vue-router | 路由 | 3.0.7 |
-|vue-cookie | cookie管理| 1.1.4 |
-|vuex | 状态管理 | 3.3.0 |
-|axios | HTTP库|0.19.2 |
+|sys_code | 系统编码表| 用来保存系统信息、clientId、密匙等 |
+|sys_code_menu | 系统菜单关联表| 系统和菜单的对应关系 |
+|sys_menu | 菜单表| 保存菜单和目录信息 |
+|sys_rest  | rest接口表| 保存各个系统的REST接口和权限 |
+|sys_role | 角色表| 角色的相关信息 |
+|sys_role_menu | 角色菜单关联表| 角色可以查看的菜单 |
+|sys_role_rest | 角色接口关联表| 角色可以访问的接口 |
+|sys_user | 用户表| 用户的相关信息 |
+|sys_user_role| 角色表| 用户关联的角色，一个用户对应多个角色 |
 
-## 三、服务端数据库结构
+## 五、问答
 
-```
-sys_code // 系统编码表
-sys_code_menu // 系统菜单关联表
-sys_menu // 菜单表
-sys_rest  // rest接口表
-sys_role // 角色表
-sys_role_menu // 角色菜单关联表
-sys_role_rest // 角色接口关联表
-sys_user // 用户表
-sys_user_role // 角色表
-```
+1. SpringBoot项目依赖了webcenter-client.jar后集成了那些功能？
+    答:  提供了单点登录、动态菜单、动态权限功能。
+2. 前端Vue通过脚手架初始化之后有那些功能？
+    答：实现了动态路由，菜单直接在服务端的菜单管理里面进行配置。
+3. 客服端与服务端之间如何通信？
+    答: 之间的通信通过Redis的异步消息队列实现。
