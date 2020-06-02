@@ -10,7 +10,7 @@ import com.github.gaoqisen.webcenter.pojo.Result;
 import com.github.gaoqisen.webcenter.pojo.SysUser;
 import com.github.gaoqisen.webcenter.pojo.WebCenterConsole;
 import com.github.gaoqisen.webcenter.utils.DigestUtils;
-import io.swagger.annotations.ApiOperation;
+import com.github.gaoqisen.webcenter.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -130,7 +130,7 @@ public class ApiController {
 
         String redirect = HttpUtil.urlJoint(request.getServerName(), request.getServerPort(), contextPath);
         if(webCenterConsole.getForestage()) {
-            redirect = HttpUtil.urlJoint(webCenterConsole.getForestageHost(), webCenterConsole.getForestagePort(), contextPath);
+            redirect = HttpUtil.urlJoint(webCenterConsole.getForestageHost(), webCenterConsole.getForestagePort(), "/");
         }
         try {
             response.sendRedirect(redirect);

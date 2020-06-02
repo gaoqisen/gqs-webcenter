@@ -2,11 +2,9 @@ package com.github.gaoqisen.webcenter.core;
 
 import com.alibaba.fastjson.JSON;
 import com.github.gaoqisen.webcenter.constant.RedisKeyConstant;
-import com.github.gaoqisen.webcenter.constant.ServerContextConstant;
-import com.github.gaoqisen.webcenter.http.HttpUtil;
 import com.github.gaoqisen.webcenter.pojo.SysRest;
 import com.github.gaoqisen.webcenter.pojo.WebCenterConsole;
-import io.swagger.annotations.ApiOperation;
+import com.github.gaoqisen.webcenter.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;

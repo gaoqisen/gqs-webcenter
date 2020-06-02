@@ -2,13 +2,10 @@ package com.github.gaoqisen.webcenter.core;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.github.gaoqisen.webcenter.constant.ServerContextConstant;
 import com.github.gaoqisen.webcenter.constant.SysPrompt;
-import com.github.gaoqisen.webcenter.http.HttpUtil;
 import com.github.gaoqisen.webcenter.pojo.Result;
 import com.github.gaoqisen.webcenter.pojo.SysRest;
 import com.github.gaoqisen.webcenter.pojo.SysUser;
-import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -36,6 +33,9 @@ public class SecurityInterceptor implements HandlerInterceptor {
         // 获取系统的权限，判断当前接口是否需要权限
         String redisSysRest = stringRedisTemplate.opsForValue().get(applicationName);
         List<SysRest> list = JSONObject.parseArray(redisSysRest, SysRest.class);
+        if(list == null) {
+            return true;
+        }
         SysRest sysRest = null;
         for (int i = 0; i < list.size(); i++) {
             if(request.getServletPath().equals(list.get(i).getUrl())) {

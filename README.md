@@ -59,84 +59,59 @@ Webpack4.0.0+
 
 ### 2.1 运行Webcenter服务端
 
-#### 2.1.1 基础组件依赖
+#### 2.1.1 环境准备
 
-1. 服务端依赖Redis和Mysql，请先安装。
-2. 请下载项目源码并解压，获取 “WebCenter数据库初始化SQL脚本(/db/webcenter.sql)” 并执行。
+1. 请先安装Redis、Mysql、JDK1.8。
+2. 获取 “WebCenter数据库初始化SQL脚本(/db/[webcenter.sql](https://github.com/gaoqisen/gqs-webcenter/blob/master/db/webcenter.sql))” 并执行。
 
-#### 2.1.2 获取源码并运行
+#### 2.1.2 获取jar包
 
-1. 可以通过下载源码进行编译获取jar包，源码结构如下：
-    
-2. 部署成功之后访问http://localhost:8000， 出现如下页面表示部署成功。默认登录账号admin,登录密码admin。
-        ![https://gaoqisen.github.io/GraphBed/202005/20200523232105.png](https://gaoqisen.github.io/GraphBed/202005/20200523232105.png)
-3. 也可以直接下载Release后的jar包进行安装。
-    -  在启动命令时进行参数配置如：
-    ```
-        nohup java -Xms1024m -Xmx1024m -jar webcenter-console-1.0.0.jar --spring.database.username=root --spring.database.password=123456 --spring.redis.password=123456 >/dev/null 2>&1 &
-    ```
-    
-    - 或者在jar包同级目录下新建config目录并把下面的配置写在application.yml文件中，mysql和redis的配置改成本地的。
-    ```
-    server:
-      port: 8000
-    spring:
-      application:
-        name: webcenter-console
-      # 返回json格式
-      jackson:
-        default-property-inclusion: non_null
-        date-format: yyyy-MM-dd HH:mm:ss
-        time-zone: GMT+8
-      ### redis配置
-      redis:
-        host: localhost
-        password: 123456
-        port: 6379
-        timeout: 60000
-      ### 数据库配置
-      datasource:
-        username: root
-        password: 123456
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://localhost:3306/bsp?characterEncoding=utf8&useSSL=false
-    mybatis:
-      mapper-locations: classpath:mapping/*.xml
-      type-aliases-package: com.gaoqisen.webcenter.entity
-    webcenter:
-      client:
-        ### 前后端分离：true表示前后端分离，用于单点登录时重定向到前端的地址。false表示非前后端分离，可以不用配置host和prot
-        forestage: true
-        host: localhost
-        port: 8080
-    ```
+- github: https://github.com/gaoqisen/gqs-webcenter/releases
+- gitee: https://gitee.com/gaoqisen/gqs-webcenter/releases
 
-### 2.2 前后端不分离搭建客服端
+#### 2.1.3 启动jar包
 
-> 通过脚手架搭件项目之后，直接main方法启动即可。
+```
+// 默认mysql密码123456，redis密码123456启动
+nohub jara -Xms1024m -Xmx1024m -jar webcenter-console-1.0.0.jar
+// 修改mysql密码，redis密码
+nohup java -Xms1024m -Xmx1024m -jar webcenter-console-1.0.0.jar --spring.database.username=root --spring.database.password=23456 --spring.redis.password=23456
+```
+
+访问http://localhost:8000即可。
+
+### 2.2 客户端搭建(前后端不分离)
 
 ![https://gaoqisen.github.io/GraphBed/202006/20200602095927.png](https://gaoqisen.github.io/GraphBed/202006/20200602095927.png)
 
 ```
 // 全局安装webcenter客服端脚手架
 npm install webc-cli -g
-// 之前有安装的需要更新到1.0.2版本
+// 之前有安装的需要更新到1.0.3版本
 npm update webc-cli -g
 // 安装成功之后执行webc命令, 查看是否安装成功
 webc 
-// 快速搭建项目如上图
+// 快速搭建项目(ArtifactID就是上下文路径)如上图, 之后启动main方法
 webc boot
+// 进入到前端目录
+cd demo/src/main/resources/webpage
+// 安装依赖，如果没有安装cnpm需要先安装：npm install cnpm
+cnpm install
+// 启动前端服务
+npm run dev
 ```
 
-- ArtifactID就是上下文路径，搭建成功启动后，通过http://localhost:8001/ArtifactID 进行访问，如：http://localhost:8001/demo
+- 快速搭建的项目main方法启动之后通过http://localhost:8001/ArtifactID 访问
+- 前端项目启动后，开发环境通过http://localhost:8080访问即可
+- 本地开发时将webcenter.client.forestage配置设置为true，方便本地vue开发。打包上线时改为false。
 - 打包上线运行时，需要先在/src/main/resources/webpage目录下npm run build(将vue静态文件打包到resources/public里面)之后在maven clean install。
- - 本地开发时可以webcenter.client.forestage配置改为true，方便本地vue开发。
+- 打包上线后ArtifactID就是上下文路径，通过http://localhost:8001/ArtifactID 进行访问，如：http://localhost:8001/demo
+- 前后端不分离搭建后，打包为一个jar包，静态文件通过SpringBoot内置的tomcat访问。前后端分离的项目前端静态文件可以用nginx进行代理。(前后端不分离的搭建成功之后就可以开发业务逻辑了)
  
-### 2.3 前后端分离搭建客服端
+### 2.3 客户端搭建(前后端分离)
 
 ![https://gaoqisen.github.io/GraphBed/202005/20200527215308.png](https://gaoqisen.github.io/GraphBed/202005/20200527215308.png)
 
-    
 #### 2.3.1 创建Maven后端
 
 > 创建出springBoot项目之后可以把配置文件改为yml格式，因为后面的配置都是基于yml的。如果需要用properties格式的话可以在https://www.toyaml.com/index.html 里面进行转换。创建成功之后引入maven依赖、添加配置、创建WebCenterConfig.java即可。
@@ -300,16 +275,6 @@ webc list
 webc init webcenter sample
 ```
 
-- Vue项目引入的主要插件。
-
-    | 名称 | 介绍 | 版本 |地址|
-    | --- | --- | --- | --- |
-    | element-ui | 饿了么后端UI框架 | 2.8.2 |https://element.eleme.cn/2.8/#/zh-CN/component/installation|
-    |fortawesome | 图标库 | 5.13 |http://www.fontawesome.com.cn/faicons/|
-    |vue-router | 路由 | 3.0.7 |https://cn.vuejs.org/v2/guide/routing.html|
-    |vuex | 状态管理 | 3.3.0 |https://vuex.vuejs.org/zh/|
-    |axios | HTTP库|0.19.2 |http://www.axios-js.com/zh-cn/docs/|
-
 ## 三、功能介绍
 
 > 完成上面的搭建之后，启动Maven后端和Vue前端就可以直接开发自己的业务逻辑了。
@@ -335,27 +300,28 @@ webc init webcenter sample
 
 ### 3.4 REST接口配置
 
-rest接口有3种权限：公开、登录、权限。客户端启动之后自动注册接口到服务端默认为公开所有人都可以访问的权限。改为登录接口之后，访问的权限就必须登录之后才可以访问。需要权限的接口级别最高必须在权限里面给角色配置了权限才可以访问。
+- 后端接口通过@ApiOperation注解标识接口名称，如：@ApiOperation("接口备注")
+- rest接口有3种权限：公开、登录、权限。客户端启动之后自动注册接口到服务端默认为公开所有人都可以访问的权限。改为登录接口之后，访问的权限就必须登录之后才可以访问。需要权限的接口级别最高必须在权限里面给角色配置了权限才可以访问。
 
 ## 四、结构
 
 ### 4.1 Webcenter项目结构
 
-    ```
-     ──gqs-webcenter
-       ├── db  // 数据库
-       │   └── webcenter.sql // 数据库初始化脚本
-       ├── gqs-webcenter-client  // 客服端
-       ├── gqs-webcenter-common  // 通用工具
-       ├── gqs-webcenter-component  // 通用组件
-       │   ├── gqs-webcenter-redis  // redis组件
-       │   ├── gqs-webcenter-webapi  // swagger组件
-       ├── gqs-webcenter-console  // 控制台，需要编译打包的模块
-       ├── gqs-webcenter-sample  // 简单的客服端例子
-       ├── gqs-webcenter-service  // 服务层，数据访问层
-       ├── gqs-webcenter-webpage  // 前端项目,build之后将静态文件打包到了 gqs-webcenter-console的resource/public里面
-       └── readme.md  // 项目介绍
-    ```
+```
+ ──gqs-webcenter
+   ├── db  // 数据库
+   │   └── webcenter.sql // 数据库初始化脚本
+   ├── gqs-webcenter-client  // 客服端
+   ├── gqs-webcenter-common  // 通用工具
+   ├── gqs-webcenter-component  // 通用组件
+   │   ├── gqs-webcenter-redis  // redis组件
+   │   ├── gqs-webcenter-webapi  // swagger组件
+   ├── gqs-webcenter-console  // 控制台，需要编译打包的模块
+   ├── gqs-webcenter-sample  // 简单的客服端例子
+   ├── gqs-webcenter-service  // 服务层，数据访问层
+   ├── gqs-webcenter-webpage  // 前端项目,build之后将静态文件打包到了 gqs-webcenter-console的resource/public里面
+   └── readme.md  // 项目介绍
+```
 
 ### 4.2 数据库结构
 
@@ -370,6 +336,16 @@ rest接口有3种权限：公开、登录、权限。客户端启动之后自动
 |sys_role_rest | 角色接口关联表| 角色可以访问的接口 |
 |sys_user | 用户表| 用户的相关信息 |
 |sys_user_role| 角色表| 用户关联的角色，一个用户对应多个角色 |
+
+### 4.3 Vue项目引入的主要插件。
+
+| 名称 | 介绍 | 版本 |地址|
+| --- | --- | --- | --- |
+| element-ui | 饿了么后端UI框架 | 2.8.2 |https://element.eleme.cn/2.8/#/zh-CN/component/installation|
+|fortawesome | 图标库 | 5.13 |http://www.fontawesome.com.cn/faicons/|
+|vue-router | 路由 | 3.0.7 |https://cn.vuejs.org/v2/guide/routing.html|
+|vuex | 状态管理 | 3.3.0 |https://vuex.vuejs.org/zh/|
+|axios | HTTP库|0.19.2 |http://www.axios-js.com/zh-cn/docs/|
 
 ## 五、问答
 
