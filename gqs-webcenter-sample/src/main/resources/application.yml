@@ -24,6 +24,6 @@ webcenter:
     secretkey: qOIWRbzeFvOnXUYTspfSt2ibfJPe1vtG
   ### 客服端配置，是否前后端分离，用于单点登录的地址跳转。forestage为false时，host和port可以不写
   client:
-    forestage: false
+    forestage: true
     host: localhost
     port: 8081

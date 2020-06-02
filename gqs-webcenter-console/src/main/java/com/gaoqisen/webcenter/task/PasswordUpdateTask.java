@@ -37,6 +37,7 @@ public class PasswordUpdateTask {
             try{
                 JSONObject jsonObject = JSONObject.parseObject(passwordInfo);
                 sysUserService.updatePassword(jsonObject.getInteger("userId"), jsonObject.getString("password"), jsonObject.getString("newPassword"));
+                logger.info("Redis消费修改密码定时.");
             }catch(Exception e) {
                 logger.error("密码修改失败: " + passwordInfo);
                 return;
@@ -47,7 +48,6 @@ public class PasswordUpdateTask {
 
     @Scheduled(cron = "${webcenter.scheduled.cron}")
     public void handlePasswordUpdate(){
-        logger.info("Redis消费修改密码定时开始.");
         if(isRuning) {
             return;
         }

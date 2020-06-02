@@ -57,8 +57,6 @@ Webpack4.0.0+
 
 ## 二、快速入门
 
-![https://gaoqisen.github.io/GraphBed/202005/20200527215308.png](https://gaoqisen.github.io/GraphBed/202005/20200527215308.png)
-
 ### 2.1 运行Webcenter服务端
 
 #### 2.1.1 基础组件依赖
@@ -70,21 +68,6 @@ Webpack4.0.0+
 
 1. 可以通过下载源码进行编译获取jar包，源码结构如下：
     
-    ```
-     ──gqs-webcenter
-       ├── db  // 数据库
-       │   └── webcenter.sql // 数据库初始化脚本
-       ├── gqs-webcenter-client  // 客服端
-       ├── gqs-webcenter-common  // 通用工具
-       ├── gqs-webcenter-component  // 通用组件
-       │   ├── gqs-webcenter-redis  // redis组件
-       │   ├── gqs-webcenter-webapi  // swagger组件
-       ├── gqs-webcenter-console  // 控制台，需要编译打包的模块
-       ├── gqs-webcenter-sample  // 简单的客服端例子
-       ├── gqs-webcenter-service  // 服务层，数据访问层
-       ├── gqs-webcenter-webpage  // 前端项目,build之后将静态文件打包到了 gqs-webcenter-console的resource/public里面
-       └── readme.md  // 项目介绍
-    ```
 2. 部署成功之后访问http://localhost:8000， 出现如下页面表示部署成功。默认登录账号admin,登录密码admin。
         ![https://gaoqisen.github.io/GraphBed/202005/20200523232105.png](https://gaoqisen.github.io/GraphBed/202005/20200523232105.png)
 3. 也可以直接下载Release后的jar包进行安装。
@@ -127,8 +110,34 @@ Webpack4.0.0+
         host: localhost
         port: 8080
     ```
+
+### 2.2 前后端不分离搭建客服端
+
+> 通过脚手架搭件项目之后，直接main方法启动即可。
+
+![https://gaoqisen.github.io/GraphBed/202006/20200602095927.png](https://gaoqisen.github.io/GraphBed/202006/20200602095927.png)
+
+```
+// 全局安装webcenter客服端脚手架
+npm install webc-cli -g
+// 之前有安装的需要更新到1.0.2版本
+npm update webc-cli -g
+// 安装成功之后执行webc命令, 查看是否安装成功
+webc 
+// 快速搭建项目如上图
+webc boot
+```
+
+- ArtifactID就是上下文路径，搭建成功启动后，通过http://localhost:8001/ArtifactID 进行访问，如：http://localhost:8001/demo
+- 打包上线运行时，需要先在/src/main/resources/webpage目录下npm run build(将vue静态文件打包到resources/public里面)之后在maven clean install。
+ - 本地开发时可以webcenter.client.forestage配置改为true，方便本地vue开发。
+ 
+### 2.3 前后端分离搭建客服端
+
+![https://gaoqisen.github.io/GraphBed/202005/20200527215308.png](https://gaoqisen.github.io/GraphBed/202005/20200527215308.png)
+
     
-### 2.2 创建Maven后端
+#### 2.3.1 创建Maven后端
 
 > 创建出springBoot项目之后可以把配置文件改为yml格式，因为后面的配置都是基于yml的。如果需要用properties格式的话可以在https://www.toyaml.com/index.html 里面进行转换。创建成功之后引入maven依赖、添加配置、创建WebCenterConfig.java即可。
 
@@ -278,7 +287,7 @@ Webpack4.0.0+
     }
     ```
     
-#### 2.3 创建Vue前端
+#### 2.3.2 创建Vue前端
 
 ```
 // 全局安装webcenter客服端脚手架
@@ -328,7 +337,27 @@ webc init webcenter sample
 
 rest接口有3种权限：公开、登录、权限。客户端启动之后自动注册接口到服务端默认为公开所有人都可以访问的权限。改为登录接口之后，访问的权限就必须登录之后才可以访问。需要权限的接口级别最高必须在权限里面给角色配置了权限才可以访问。
 
-## 四、数据库结构
+## 四、结构
+
+### 4.1 Webcenter项目结构
+
+    ```
+     ──gqs-webcenter
+       ├── db  // 数据库
+       │   └── webcenter.sql // 数据库初始化脚本
+       ├── gqs-webcenter-client  // 客服端
+       ├── gqs-webcenter-common  // 通用工具
+       ├── gqs-webcenter-component  // 通用组件
+       │   ├── gqs-webcenter-redis  // redis组件
+       │   ├── gqs-webcenter-webapi  // swagger组件
+       ├── gqs-webcenter-console  // 控制台，需要编译打包的模块
+       ├── gqs-webcenter-sample  // 简单的客服端例子
+       ├── gqs-webcenter-service  // 服务层，数据访问层
+       ├── gqs-webcenter-webpage  // 前端项目,build之后将静态文件打包到了 gqs-webcenter-console的resource/public里面
+       └── readme.md  // 项目介绍
+    ```
+
+### 4.2 数据库结构
 
 | 名称 | 表名 |描述  |
 | --- | --- | --- |

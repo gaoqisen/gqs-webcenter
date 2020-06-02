@@ -26,6 +26,7 @@
     "v-charts": "^1.19.0",
     "vue": "^2.5.2",
     "vue-cookie": "^1.1.4",
+    "vue-fontawesome-elementui-icon-picker": "^0.1.9",
     "vue-loader": "^13.7.3",
     "vue-router": "^3.0.7",
     "vue-style-loader": "^3.1.2",

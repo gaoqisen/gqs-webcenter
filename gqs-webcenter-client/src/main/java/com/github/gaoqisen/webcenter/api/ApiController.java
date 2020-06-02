@@ -128,9 +128,9 @@ public class ApiController {
         String userLoginSetKey = "USER_LOGIN_SET".concat(String.valueOf(sysUser.getUserId()));
         stringRedisTemplate.opsForSet().add(userLoginSetKey, redisLoginKey);
 
-        String redirect = HttpUtil.urlJoint(request.getServerName(), request.getServerPort(), "/");
+        String redirect = HttpUtil.urlJoint(request.getServerName(), request.getServerPort(), contextPath);
         if(webCenterConsole.getForestage()) {
-            redirect = HttpUtil.urlJoint(webCenterConsole.getForestageHost(), webCenterConsole.getForestagePort(), "/");
+            redirect = HttpUtil.urlJoint(webCenterConsole.getForestageHost(), webCenterConsole.getForestagePort(), contextPath);
         }
         try {
             response.sendRedirect(redirect);

@@ -54,6 +54,7 @@ public class RestBatchInsertTask {
                     List<SysRest> list = this.sysRestService.list(new QueryWrapper<SysRest>().eq("application_name",currentApplicationName));
                     stringRedisTemplate.opsForValue().set(currentApplicationName, JSON.toJSONString(list));
                 }
+                logger.info("Redis消费批量REST新增.");
             }catch(Exception e) {
                 logger.error("REST接口批量插入失败: " + restInsertInfo);
                 return;
@@ -63,7 +64,6 @@ public class RestBatchInsertTask {
 
     @Scheduled(cron = "${webcenter.scheduled.cron}")
     public void handleRestBatchInsert(){
-        logger.info("Redis消费批量REST新增开始.");
         if(isRuning) {
             return;
         }

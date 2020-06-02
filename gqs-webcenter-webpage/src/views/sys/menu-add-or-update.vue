@@ -49,6 +49,8 @@
 
 <script>
   import { treeDataTranslate } from '@/utils'
+  import iconPicker from 'vue-fontawesome-elementui-icon-picker'
+  Vue.use(iconPicker)
   export default {
     data () {
       var validateUrl = (rule, value, callback) => {
