@@ -4,7 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import ElementUI from 'element-ui';
-import VueCookie from 'vue-cookie' 
+import VueCookie from 'vue-cookie'
 import Axios from 'axios'
 
 import store from '@/store'
@@ -19,9 +19,11 @@ import { fas } from '@fortawesome/free-solid-svg-icons'
 import { far } from '@fortawesome/free-regular-svg-icons'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon, FontAwesomeLayers, FontAwesomeLayersText } from '@fortawesome/vue-fontawesome'
+import iconPicker from 'vue-fontawesome-elementui-icon-picker'
 
 library.add(fas,far,fab)
 
+Vue.use(iconPicker);
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.component('font-awesome-layers', FontAwesomeLayers)
 Vue.component('font-awesome-layers-text', FontAwesomeLayersText)

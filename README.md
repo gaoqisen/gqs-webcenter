@@ -19,11 +19,12 @@
     </p>
 </p>
 
+
 ## 一、简介
 
 ### 1.1 概述
 
-WebCenter是一个简单的权限管理小工具，目的是为了简化开发不用考虑系统登录、菜单权限、接口权限。利用SpringBoot进行简单配置就可以进行业务逻辑的开发。
+之前开发了好几个后台的管理系统，每次都需要写一遍登录逻辑、菜单路由、用户管理、角色管理、权限管理这些功能。为了以后再开发这种系统的时候不用再写这些重复的程序，就把这些通用的功能抽象成为了一个简单的权限管理服务(WebCenter)，WebCenter专门负责单点登录、权限管理、菜单配置、用户管理、角色管理、系统管理等。为了在创建系统的时候更简单，于是开发了一个gqs-webcenter-client.jar并上传到了中央仓库，之后创建系统的时候只需要引入这个jar包就可以集成WebCenter。每次创建项目的时候后端都需要添加配置引入jar包，前端都需要配置动态路由，为了简化到都不用复制重复的代码，于是开发了一个web-cli的npm[脚手架](#jsjjs)。在安装脚手架之后就可以直接初始化项目并进行业务逻辑的开发。
 
 ### 1.2 特性
 
@@ -78,11 +79,9 @@ nohub jara -Xms1024m -Xmx1024m -jar webcenter-console-1.0.0.jar
 nohup java -Xms1024m -Xmx1024m -jar webcenter-console-1.0.0.jar --spring.database.username=root --spring.database.password=23456 --spring.redis.password=23456
 ```
 
-访问http://localhost:8000即可。
+访问http://localhost:8000 即可。
 
 ### 2.2 客户端搭建(前后端不分离)
-
-![https://gaoqisen.github.io/GraphBed/202006/20200602095927.png](https://gaoqisen.github.io/GraphBed/202006/20200602095927.png)
 
 ```
 // 全局安装webcenter客服端脚手架
@@ -91,7 +90,7 @@ npm install webc-cli -g
 npm update webc-cli -g
 // 安装成功之后执行webc命令, 查看是否安装成功
 webc 
-// 快速搭建项目(ArtifactID就是上下文路径)如上图, 之后启动main方法
+// 快速搭建项目(搭建的直接就是SpringBoot项目,通过IntelliJ IDEA可以直接运行，前端Vue代码放在src/main/resources/webpage目录下)
 webc boot
 // 进入到前端目录
 cd demo/src/main/resources/webpage
@@ -100,13 +99,17 @@ cnpm install
 // 启动前端服务
 npm run dev
 ```
+![https://gaoqisen.github.io/GraphBed/202006/20200602095927.png](https://gaoqisen.github.io/GraphBed/202006/20200602095927.png)
 
-- 快速搭建的项目main方法启动之后通过http://localhost:8001/ArtifactID 访问
-- 前端项目启动后，开发环境通过http://localhost:8080访问即可
+- 快速搭建的项目main方法启动之后接口通过http://localhost:8001/ArtifactID 访问
+- 前端项目启动后，开发环境通过http://localhost:8080 访问即可
 - 本地开发时将webcenter.client.forestage配置设置为true，方便本地vue开发。打包上线时改为false。
 - 打包上线运行时，需要先在/src/main/resources/webpage目录下npm run build(将vue静态文件打包到resources/public里面)之后在maven clean install。
 - 打包上线后ArtifactID就是上下文路径，通过http://localhost:8001/ArtifactID 进行访问，如：http://localhost:8001/demo
 - 前后端不分离搭建后，打包为一个jar包，静态文件通过SpringBoot内置的tomcat访问。前后端分离的项目前端静态文件可以用nginx进行代理。(前后端不分离的搭建成功之后就可以开发业务逻辑了)
+ - 开发环境搭建完成之后，需要启动3个服务。（Webcenter服务端:8000, Vue前端8080，Maven后端8001）
+ 
+> IntelliJ IDEA打开vue的node_modules会出现假死现象，[解决办法](https://www.dvy.com.cn/2017/11/22/4535.html)： Editor>>File Types>>在Ignore files and folders中添加;node_modules
  
 ### 2.3 客户端搭建(前后端分离)
 
@@ -122,23 +125,8 @@ npm run dev
     <dependency>
         <groupId>com.github.gaoqisen</groupId>
         <artifactId>gqs-webcenter-client</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
     </dependency>
-    
-    # 发布版本(如果没有oss.sonatype.org仓库的话，需要添加仓库)
-    <repositories>
-      <repository>
-        <id>sonatypeSnapshots</id>
-        <name>Sonatype Release</name>
-        <releases>
-          <enabled>true</enabled>
-        </releases>
-        <snapshots>
-          <enabled>false</enabled>
-        </snapshots>
-        <url>https://oss.sonatype.org/content/groups/public</url>
-      </repository>
-    </repositories>
     
     ### pom.xml测试用例
     <?xml version="1.0" encoding="UTF-8"?>
@@ -303,7 +291,22 @@ webc init webcenter sample
 - 后端接口通过@ApiOperation注解标识接口名称，如：@ApiOperation("接口备注")
 - rest接口有3种权限：公开、登录、权限。客户端启动之后自动注册接口到服务端默认为公开所有人都可以访问的权限。改为登录接口之后，访问的权限就必须登录之后才可以访问。需要权限的接口级别最高必须在权限里面给角色配置了权限才可以访问。
 
-## 四、结构
+## 四、<span id = "jsjjs">脚手架介绍</span>
+
+```
+// 命令
+webc -h // 查看命令帮助
+webc -V // 查看版本号
+webc add // 增加模版
+webc list // 查看所有的模版
+webc init webcenter sample  // 通过webcenter模版创建一个名为sample的项目
+webc boot // 快速创建一个springBoot项目
+```
+
+- webc add: 可以自己写前端的脚手架。会替换package.json里面用户信息描述等。
+- webc boot: 创建的是一个固定的格式，包含springBoot和Vue前端的代码。vue代码在resources/webpage里面。在本地开发的时候可以启动两个端口如：8001后端代码，8080前端代码。后面打包的时候在webpage目录下运行npm run build就会把前端的静态代码打包到resources/public里面，在项目根目录下运行maven clean install就可以把前端代码和后端代码打成一个包，开发的时候可以是前后端分离的开发模式，打包之后就是一个jar包，简化了前后端分离的nginx配置。如果需要前后端分离部署的话，只需要把resources/public里面的静态文件拷贝到其他目录下面，nginx指定路径就可以了。
+
+## 五、结构
 
 ### 4.1 Webcenter项目结构
 
@@ -347,7 +350,27 @@ webc init webcenter sample
 |vuex | 状态管理 | 3.3.0 |https://vuex.vuejs.org/zh/|
 |axios | HTTP库|0.19.2 |http://www.axios-js.com/zh-cn/docs/|
 
-## 五、问答
+### 4.4 Vue结构
+
+```
+├── build  // 构建
+├── config  // 配置文件
+├── index.html  // 入口文件
+├── node_modules  // 依赖下载的包
+├── package.json // 依赖
+├── src 
+ |  ├── App.vue  // 入口
+ |  ├── assets  // 静态文件
+ |  ├── components  // 组件
+ |  ├── main.js  // 入口js文件
+ |  ├── router  // 路由
+ |  ├── store  // 状态状态管理
+ |  ├── utils  // 工具
+ |   └── views  // 视图，需要开发的代码位置
+└── static  // 静态文件
+```
+
+## 六、问答
 
 1. SpringBoot项目依赖了webcenter-client.jar后集成了那些功能？
     答:  提供了单点登录、动态菜单、动态权限功能。
@@ -355,3 +378,9 @@ webc init webcenter sample
     答：实现了动态路由，菜单直接在服务端的菜单管理里面进行配置。
 3. 客服端与服务端之间如何通信？
     答: 之间的通信通过Redis的异步消息队列实现。
+    
+## 七、参考
+    
+动态路由：https://github.com/renrenio/renren-fast-vue
+脚手架开发：https://juejin.im/post/5c94fef7f265da60fd0c15e8
+Maven上传jar包: https://www.sojson.com/blog/250.html

@@ -26,7 +26,7 @@ mybatis:
 webcenter:
   client:
     ### 前后端分离：true表示前后端分离，用于单点登录时重定向到前端的地址。false表示非前后端分离，可以不用配置host和prot
-    forestage: false
+    forestage: true
     host: localhost
     port: 8080
   ### 定时消费redis list
