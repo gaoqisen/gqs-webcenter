@@ -44,7 +44,7 @@ public class MyShiroRealm  extends AuthorizingRealm {
         //获取用户的输入的账号
         String username = (String) token.getPrincipal();
         String password = new String((char[]) token.getCredentials());
-        SysUser sysUser = sysUserService.getOne(new QueryWrapper<SysUser>().eq("username", username));
+        SysUser sysUser = sysUserService.getOne(new QueryWrapper<SysUser>().eq(SysUser.COL_USERNAME, username));
         //账号不存在
         if(sysUser == null) {
             throw new UnknownAccountException("账号或密码不正确");
@@ -65,7 +65,7 @@ public class MyShiroRealm  extends AuthorizingRealm {
         return info;
     }
     /**
-     * 用户访问授权
+     * 用户访问授权, 直接读取数据库。如果修改用户权限了，立即生效
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {

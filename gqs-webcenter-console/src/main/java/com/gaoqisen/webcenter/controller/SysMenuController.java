@@ -19,6 +19,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -54,6 +55,7 @@ public class SysMenuController {
         if(sysUser == null) {
             // 未获取到用户信息，判断为其他系统登出，当前系统也登出
             SecurityUtils.getSubject().logout();
+            return Result.success().put("menuList", new ArrayList()).put("permList", new Set[]{});
         }
         // 通userId和应用名获取菜单
         List<SysMenu> sysMenuList = sysMenuService.queryMenuByUserIdAndApplicationName(sysUser.getUserId(),springApplicationName);
@@ -123,13 +125,13 @@ public class SysMenuController {
             return Result.error("菜单ID不能为空");
         }
         // 判断是否有下级菜单
-        Integer count = this.sysMenuService.count(new QueryWrapper<SysMenu>().eq("parent_id", menuId));
+        Integer count = this.sysMenuService.count(new QueryWrapper<SysMenu>().eq(SysMenu.COL_PARENT_ID, menuId));
         if(count > 0) {
             return Result.error("请先删除子菜单或按钮");
         }
         this.sysMenuService.removeById(menuId);
-        this.sysCodeMenuService.remove(new QueryWrapper<SysCodeMenu>().eq("menu_id", menuId));
-        this.sysRoleMenuService.remove(new QueryWrapper<SysRoleMenu>().eq("menu_id", menuId));
+        this.sysCodeMenuService.remove(new QueryWrapper<SysCodeMenu>().eq(SysMenu.COL_MENU_ID, menuId));
+        this.sysRoleMenuService.remove(new QueryWrapper<SysRoleMenu>().eq(SysMenu.COL_MENU_ID, menuId));
         return Result.success();
     }
 

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gaoqisen.webcenter.constant.Constant;
+import com.gaoqisen.webcenter.constant.RedisKeyConstant;
 import com.gaoqisen.webcenter.constant.SysContextConstant;
 import com.gaoqisen.webcenter.entity.SysCode;
 import com.gaoqisen.webcenter.entity.SysMenu;
@@ -26,6 +27,8 @@ import org.apache.shiro.crypto.hash.Hash;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.apache.shiro.subject.Subject;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -48,6 +51,8 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @RequestMapping("main")
 public class LoginController {
+
+    Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private Producer producer;
@@ -83,13 +88,17 @@ public class LoginController {
     @PostMapping("logout")
     public Result logout(HttpServletRequest httpRequest) {
         SysUser sysUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
-        String redisKeySet = "USER_LOGIN_SET".concat(String.valueOf(sysUser.getUserId()));
+        if(sysUser == null) {
+            return Result.success("用户已经退出");
+        }
+        String redisKeySet = RedisKeyConstant.USERLOGINSET.concat(String.valueOf(sysUser.getUserId()));
         Set<String> redisUsers = stringRedisTemplate.opsForSet().members(redisKeySet);
         for(String userLoginKey : redisUsers) {
             stringRedisTemplate.delete(userLoginKey);
         }
         stringRedisTemplate.delete(redisKeySet);
         SecurityUtils.getSubject().logout();
+        logger.info(sysUser.getUsername().concat("退出系统."));
         return Result.success();
     }
 
@@ -118,7 +127,7 @@ public class LoginController {
         if(!loginForm.getCaptcha().equalsIgnoreCase(captcha)) {
             return Result.error("验证码输入错误");
         }
-        SysUser sysUser = sysUserService.getOne(new QueryWrapper<SysUser>().eq("username", loginForm.getUsername()));
+        SysUser sysUser = sysUserService.getOne(new QueryWrapper<SysUser>().eq(SysUser.COL_USERNAME, loginForm.getUsername()));
         //账号不存在
         if(sysUser == null) {
             throw new UnknownAccountException("账号或密码不正确");
@@ -138,10 +147,11 @@ public class LoginController {
         stringRedisTemplate.opsForValue().set(redisLoginKey,
                 JSON.toJSONString(sysUser), 10, TimeUnit.HOURS);
 
-        String userLoginSetKey = "USER_LOGIN_SET".concat(String.valueOf(sysUser.getUserId()));
+        String userLoginSetKey = RedisKeyConstant.USERLOGINSET.concat(String.valueOf(sysUser.getUserId()));
         stringRedisTemplate.opsForSet().add(userLoginSetKey, redisLoginKey);
         stringRedisTemplate.expire(userLoginSetKey, 10, TimeUnit.HOURS);
-        return Result.success().put("username", loginForm.getUsername());
+        logger.info(sysUser.getUsername().concat("登录系统."));
+        return Result.success().put(SysUser.COL_USERNAME, loginForm.getUsername());
     }
 
     private Result shiroLogin(String username, String password) {
@@ -164,8 +174,9 @@ public class LoginController {
     @ApiOperation("单点登录判断")
     @RequestMapping(value = "/sso/login", method = RequestMethod.GET)
     public void ssoLogin(HttpServletRequest request, HttpServletResponse response, String redirect, String clientId){
+        logger.info(clientId.concat("进行单点登录判断."));
         // 校验clientId
-        SysCode sysCode = sysCodeService.getOne(new QueryWrapper<SysCode>().eq("client_id", clientId));
+        SysCode sysCode = sysCodeService.getOne(new QueryWrapper<SysCode>().eq(SysCode.COL_CLIENT_ID, clientId));
         if(sysCode == null) {
             responseOut(response, "非法ClientId");
             return;
@@ -199,10 +210,11 @@ public class LoginController {
     @PostMapping(value = "/sso/login")
     public Result ssoLogin(@RequestBody LoginForm loginForm, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse){
         // 校验clientId
-        SysCode sysCode = sysCodeService.getOne(new QueryWrapper<SysCode>().eq("client_id", loginForm.getClientId()));
+        SysCode sysCode = sysCodeService.getOne(new QueryWrapper<SysCode>().eq(SysCode.COL_CLIENT_ID, loginForm.getClientId()));
         if(sysCode == null) {
             return Result.error("客服端ID不正确");
         }
+        logger.info(loginForm.getClientId().concat("开始单点登录."));
         String sessionId = httpServletRequest.getSession().getId();
         String captcha = stringRedisTemplate.opsForValue().get(Constant.CAPTCHA.concat(httpServletRequest.getSession().getId())).toString();
         if(!loginForm.getCaptcha().equalsIgnoreCase(captcha)) {
@@ -210,7 +222,7 @@ public class LoginController {
         }
 
         //用户信息
-        SysUser user = sysUserService.getOne(new QueryWrapper<SysUser>().eq("username", loginForm.getUsername()));
+        SysUser user = sysUserService.getOne(new QueryWrapper<SysUser>().eq(SysUser.COL_USERNAME, loginForm.getUsername()));
 
         //账号不存在、密码错误
         String cpass = DigestUtils.getDigest(loginForm.getPassword() + user.getSalt());
@@ -238,7 +250,7 @@ public class LoginController {
         // 当前系统登录信息缓存10小时
         stringRedisTemplate.opsForValue().set(redisLoginKey,JSON.toJSONString(user), 10, TimeUnit.HOURS);
         // 系统登录key记录
-        String userLoginSetKey = "USER_LOGIN_SET".concat(String.valueOf(user.getUserId()));
+        String userLoginSetKey = RedisKeyConstant.USERLOGINSET.concat(String.valueOf(user.getUserId()));
         stringRedisTemplate.opsForSet().add(userLoginSetKey, redisLoginKey);
         stringRedisTemplate.expire(userLoginSetKey, 10, TimeUnit.HOURS);
         return Result.success().putData(code);

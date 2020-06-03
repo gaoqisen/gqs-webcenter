@@ -47,7 +47,7 @@ public class SysCodeController {
         for(SysCode sysCode : list) {
             HashMap hashMap = Maps.newHashMap();
             hashMap.put("menuList", this.sysMenuService.queryMenuByApplicationName(sysCode.getApplicationName()));
-            hashMap.put("restList",  this.sysRestService.list(new QueryWrapper<SysRest>().eq("application_name", sysCode.getApplicationName())));
+            hashMap.put("restList",  this.sysRestService.list(new QueryWrapper<SysRest>().eq(SysCode.COL_APPLICATION_NAME, sysCode.getApplicationName())));
             dataList.put(sysCode.getApplicationName(), hashMap);
         }
         return Result.success().put("sysCodeList",list).put("dataList", dataList);

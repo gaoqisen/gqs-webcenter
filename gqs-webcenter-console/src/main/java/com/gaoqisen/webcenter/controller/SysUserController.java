@@ -41,6 +41,14 @@ public class SysUserController {
     @PostMapping("password")
     public Result password(@RequestBody PasswordForm passwordForm) {
 
+        if(StringUtils.isBlank(passwordForm.getNewPassword())) {
+            return Result.error("新密码获取失败");
+        }
+
+        if(StringUtils.isBlank(passwordForm.getPassword())) {
+            return Result.error("旧密码获取失败");
+        }
+
         SysUser sysUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
         //sha256加密
         String password = DigestUtils.getDigest(passwordForm.getPassword() + sysUser.getSalt());
@@ -90,7 +98,7 @@ public class SysUserController {
             return Result.error("当前用户不能删除");
         }
         this.sysUserService.removeByIds(Arrays.asList(userIds));
-        this.sysUserRoleService.remove(new QueryWrapper<SysUserRole>().in("user_id", userIds));
+        this.sysUserRoleService.remove(new QueryWrapper<SysUserRole>().in(SysUser.COL_USER_ID, userIds));
         return Result.success();
     }
 

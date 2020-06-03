@@ -27,7 +27,7 @@ public class SysRestController {
         if(StringUtils.isBlank(applicationName)) {
             applicationName = springApplicationName;
         }
-        return Result.success().put("listObject", this.sysRestService.list(new QueryWrapper<SysRest>().eq("application_name", applicationName)));
+        return Result.success().put("listObject", this.sysRestService.list(new QueryWrapper<SysRest>().eq(SysRest.COL_APPLICATION_NAME, applicationName)));
     }
 
     @ApiOperation("分页获取REST接口信息")

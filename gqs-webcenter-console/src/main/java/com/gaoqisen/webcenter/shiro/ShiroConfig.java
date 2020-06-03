@@ -43,7 +43,7 @@ public class ShiroConfig {
         //配置退出 过滤器,其中的具体的退出代码Shiro已经替我们实现了
         filterChainDefinitionMap.put("/logout", "logout");
         // 获取所有配置权限
-        List<SysRest> list = this.sysRestService.list(new QueryWrapper<SysRest>().eq("application_name",applicationName));
+        List<SysRest> list = this.sysRestService.list(new QueryWrapper<SysRest>().eq(SysRest.COL_APPLICATION_NAME,applicationName));
         for(SysRest obj : list) {
             filterChainDefinitionMap.put(obj.getUrl(), obj.getPermissions());
         }
