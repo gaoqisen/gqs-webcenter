@@ -10,7 +10,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>gqs-webcenter-sample</artifactId>
-
+    <packaging>jar</packaging>
+    <inceptionYear>2020-Now</inceptionYear>
+    <description>Webcenter客服端例子</description>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

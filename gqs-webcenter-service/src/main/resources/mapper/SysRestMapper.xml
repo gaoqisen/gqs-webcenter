@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gaoqisen.webcenter.mapper.SysRestMapper">
-  <resultMap id="BaseResultMap" type="com.gaoqisen.webcenter.entity.SysRest">
+<mapper namespace="com.github.gaoqisen.webcenter.mapper.SysRestMapper">
+  <resultMap id="BaseResultMap" type="com.github.gaoqisen.webcenter.entity.SysRest">
     <!--@mbg.generated-->
     <!--@Table sys_rest-->
     <result column="digest" jdbcType="VARCHAR" property="digest" />

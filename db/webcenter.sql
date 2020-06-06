@@ -1,3 +1,5 @@
+CREATE database if NOT EXISTS `webcenter` default character set utf8;
+use `webcenter`;
 create table sys_code
 (
     id               bigint auto_increment
@@ -208,6 +210,6 @@ INSERT INTO sys_role_rest (id, role_id, rest_id) VALUES (79, 1, '4140174b466967b
 INSERT INTO sys_role_rest (id, role_id, rest_id) VALUES (80, 1, 'e48d454650d06a939b610f92f2d56e33');
 INSERT INTO sys_role_rest (id, role_id, rest_id) VALUES (81, 1, '90cded533a47ae286b7febd20326560e');
 
-INSERT INTO sys_user (user_id, username, password, salt, email, mobile, status, create_user_id, create_time) VALUES (1, 'admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', '', '1073825890@qq.com', '15885529693', 1, 1, '2016-11-11 11:11:11');
+INSERT INTO sys_user (user_id, username, password, salt, email, mobile, status, create_user_id, create_time) VALUES (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', '', '1073825890@qq.com', '15885529693', 1, 1, '2016-11-11 11:11:11');
 
 INSERT INTO sys_user_role (id, user_id, role_id) VALUES (1, 1, 1);

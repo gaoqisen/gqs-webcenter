@@ -8,9 +8,10 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <packaging>jar</packaging>
-    <version>1.0.0</version>
     <artifactId>webcenter-console</artifactId>
+    <packaging>jar</packaging>
+    <inceptionYear>2020-Now</inceptionYear>
+    <description>Webcenter控制台服务端</description>
     <properties>
         <kaptcha.version>0.0.9</kaptcha.version>
         <shiro.version>1.4.0</shiro.version>

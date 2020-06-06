@@ -10,7 +10,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>gqs-webcenter-webapi</artifactId>
-
+    <packaging>jar</packaging>
+    <inceptionYear>2020-Now</inceptionYear>
+    <description>Swagger通用服务</description>
 
     <properties>
         <!-- Swagger-->

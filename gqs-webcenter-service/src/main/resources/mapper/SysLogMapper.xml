@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gaoqisen.webcenter.mapper.SysLogMapper">
-  <resultMap id="BaseResultMap" type="com.gaoqisen.webcenter.entity.SysLog">
+<mapper namespace="com.github.gaoqisen.webcenter.mapper.SysLogMapper">
+  <resultMap id="BaseResultMap" type="com.github.gaoqisen.webcenter.entity.SysLog">
     <!--@mbg.generated-->
     <!--@Table sys_log-->
     <id column="id" jdbcType="BIGINT" property="id" />
