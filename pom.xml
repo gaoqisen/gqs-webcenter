@@ -46,8 +46,6 @@
         <maven-scm-provider-jgit-plugin.version>1.9.5</maven-scm-provider-jgit-plugin.version>
         <spring-javaformat-maven-plugin.version>0.0.22</spring-javaformat-maven-plugin.version>
 
-<!--        <webcenter.version>1.0.0.RELEASE</webcenter.version>-->
-<!--        <webcenter.development.version>1.0.1-SNAPSHOT</webcenter.development.version>-->
     </properties>
 <!-- 只是声明依赖，并不自动实现引入，因此子项目需要显示的声明需要用的依赖。如果不在子项目中声明依赖，
         是不会从父项目中继承下来的；只有在子项目中写了该依赖项，并且没有指定具体版本，才会从父项目中继承该项，
@@ -141,13 +139,8 @@
                     <providerImplementations>
                         <git>jgit</git>
                     </providerImplementations>
-                    <username>gaoqisen</username>
-                    <password>Wo199304146196</password>
                     <tagBase>${project.artifactId}-${project.version}</tagBase>
                     <goals>-f pom.xml deploy</goals>
-<!--                    <releaseLabel>${webcenter.version}</releaseLabel>-->
-<!--                    <releaseVersion>${webcenter.version}</releaseVersion>-->
-<!--                    <developmentVersion>${webcenter.development.version}</developmentVersion>-->
                     <preparationGoals>clean verify</preparationGoals>
                 </configuration>
                 <!--      配合 maven-release-plugin 插件发布到 Git（GitLab，GitHub 等）           -->
@@ -155,7 +148,7 @@
                     <dependency>
                         <groupId>org.apache.maven.scm</groupId>
                         <artifactId>maven-scm-provider-jgit</artifactId>
-                        <version>1.9.5</version>
+                        <version>${maven-scm-provider-jgit-plugin.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>
