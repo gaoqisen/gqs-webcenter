@@ -23,7 +23,7 @@
     <groupId>com.gaoqisen</groupId>
     <artifactId>gqs-webcenter</artifactId>
 <!--    1（架构）.0（功能）.1（bug） 语义化版本规范-->
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>gqs-webcenter</name>
