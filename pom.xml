@@ -140,6 +140,7 @@
                         <git>jgit</git>
                     </providerImplementations>
                     <tagBase>${project.artifactId}-${project.version}</tagBase>
+                    <username>gaoqisen</username>
                     <goals>-f pom.xml deploy</goals>
                     <preparationGoals>clean verify</preparationGoals>
                 </configuration>
