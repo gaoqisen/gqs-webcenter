@@ -3,7 +3,7 @@
     <parent>
         <artifactId>gqs-webcenter</artifactId>
         <groupId>com.gaoqisen</groupId>
-        <version>1.0.1</version>
+        <version>1.0.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>webcenter-console</artifactId>
@@ -33,22 +33,22 @@
         <dependency>
             <groupId>com.gaoqisen</groupId>
             <artifactId>gqs-webcenter-service</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.gaoqisen</groupId>
             <artifactId>gqs-webcenter-redis</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.gaoqisen</groupId>
             <artifactId>gqs-webcenter-common</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.gaoqisen</groupId>
             <artifactId>gqs-webcenter-webapi</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2-SNAPSHOT</version>
         </dependency>
 <!--        module dependency end-->
         <dependency>
