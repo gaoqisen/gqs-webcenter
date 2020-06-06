@@ -10,4 +10,3 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 public class SysRoleRestServiceImpl extends ServiceImpl<SysRoleRestMapper, SysRoleRest> implements SysRoleRestService {
 
 }
-

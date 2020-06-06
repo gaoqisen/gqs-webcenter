@@ -5,11 +5,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages="com.github.gaoqisen")
+@ComponentScan(basePackages = "com.github.gaoqisen")
 public class WebcenterConsoleApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(WebcenterConsoleApplication.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(WebcenterConsoleApplication.class, args);
+	}
 
 }

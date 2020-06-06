@@ -5,9 +5,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
 
-public interface SysRoleMenuService extends IService<SysRoleMenu>{
+public interface SysRoleMenuService extends IService<SysRoleMenu> {
 
-    List<Long> queryMenuIdByRoleIdAndApplicationName(Long roleId, String applicationName);
-
+	List<Long> queryMenuIdByRoleIdAndApplicationName(Long roleId, String applicationName);
 
 }

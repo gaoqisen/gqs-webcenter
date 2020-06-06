@@ -13,11 +13,12 @@ import java.io.IOException;
  */
 public class ShiroUserFilter extends UserFilter {
 
-    @Override
-    protected void redirectToLogin(ServletRequest servletRequest, ServletResponse servletResponse) throws IOException {
-        // 返回json
-        servletResponse.setContentType("application/json; charset=utf-8");
-        String json = JSON.toJSONString(Result.error("请登录后访问"));
-        servletResponse.getWriter().write(json);
-    }
+	@Override
+	protected void redirectToLogin(ServletRequest servletRequest, ServletResponse servletResponse) throws IOException {
+		// 返回json
+		servletResponse.setContentType("application/json; charset=utf-8");
+		String json = JSON.toJSONString(Result.error("请登录后访问"));
+		servletResponse.getWriter().write(json);
+	}
+
 }

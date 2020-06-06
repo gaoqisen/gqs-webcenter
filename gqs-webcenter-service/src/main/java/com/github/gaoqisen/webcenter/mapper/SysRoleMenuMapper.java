@@ -10,6 +10,6 @@ import java.util.Map;
 @Mapper
 public interface SysRoleMenuMapper extends BaseMapper<SysRoleMenu> {
 
-    List<Long> queryMenuIdByRoleIdAndApplicationName(Map<String, Object> param);
+	List<Long> queryMenuIdByRoleIdAndApplicationName(Map<String, Object> param);
 
 }

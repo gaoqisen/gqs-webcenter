@@ -11,11 +11,12 @@ import com.github.gaoqisen.webcenter.mapper.SysRoleMapper;
 import com.github.gaoqisen.webcenter.service.SysRoleService;
 
 @Service
-public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> implements SysRoleService{
+public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> implements SysRoleService {
 
-    @Override
-    public IPage queryPage(CurrentPage currentPage) {
-        return this.page(currentPage.getPage(), new QueryWrapper<SysRole>()
-                .like(StringUtils.isNotBlank(currentPage.getParams()), "role_name", currentPage.getParams()));
-    }
+	@Override
+	public IPage queryPage(CurrentPage currentPage) {
+		return this.page(currentPage.getPage(), new QueryWrapper<SysRole>()
+				.like(StringUtils.isNotBlank(currentPage.getParams()), "role_name", currentPage.getParams()));
+	}
+
 }

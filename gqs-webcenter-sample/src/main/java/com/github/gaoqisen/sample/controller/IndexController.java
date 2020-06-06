@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/index")
 public class IndexController {
 
-
-    @ApiOperation("测试接口")
-    @PostMapping("test") public void test() {
-        System.out.println("test");
-    }
+	@ApiOperation("测试接口")
+	@PostMapping("test")
+	public void test() {
+		System.out.println("test");
+	}
 
 }

@@ -13,22 +13,22 @@ import java.util.Map;
 @RequestMapping("/sys/statistical")
 public class StatisticalController {
 
-    @Autowired
-    private SysCodeService sysCodeService;
+	@Autowired
+	private SysCodeService sysCodeService;
 
-    @Autowired
-    private SysLogService sysLogService;
+	@Autowired
+	private SysLogService sysLogService;
 
-    @GetMapping("number")
-    @ApiOperation("数量统计")
-    public Result sysStatistical() {
-        return Result.success().putData(this.sysCodeService.sysStatisticsl());
-    }
+	@GetMapping("number")
+	@ApiOperation("数量统计")
+	public Result sysStatistical() {
+		return Result.success().putData(this.sysCodeService.sysStatisticsl());
+	}
 
-    @PostMapping("login")
-    @ApiOperation("统计登录数")
-    public Result statisticalLoginNumber(@RequestBody Map<String, String> param) {
-        return Result.success().putData(this.sysLogService.statisticalUserLogin(param));
-    }
+	@PostMapping("login")
+	@ApiOperation("统计登录数")
+	public Result statisticalLoginNumber(@RequestBody Map<String, String> param) {
+		return Result.success().putData(this.sysLogService.statisticalUserLogin(param));
+	}
 
 }

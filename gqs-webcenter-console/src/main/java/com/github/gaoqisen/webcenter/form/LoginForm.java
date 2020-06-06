@@ -2,58 +2,64 @@ package com.github.gaoqisen.webcenter.form;
 
 public class LoginForm {
 
-    private String username;
-    private String password;
-    private String captcha;
-    private String uuid;
-    private String redirect;
-    private String clientId;
+	private String username;
 
-    public String getUsername() {
-        return username;
-    }
+	private String password;
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	private String captcha;
 
-    public String getPassword() {
-        return password;
-    }
+	private String uuid;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	private String redirect;
 
-    public String getCaptcha() {
-        return captcha;
-    }
+	private String clientId;
 
-    public void setCaptcha(String captcha) {
-        this.captcha = captcha;
-    }
+	public String getUsername() {
+		return username;
+	}
 
-    public String getUuid() {
-        return uuid;
-    }
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public String getRedirect() {
-        return redirect;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public void setRedirect(String redirect) {
-        this.redirect = redirect;
-    }
+	public String getCaptcha() {
+		return captcha;
+	}
 
-    public String getClientId() {
-        return clientId;
-    }
+	public void setCaptcha(String captcha) {
+		this.captcha = captcha;
+	}
 
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
-    }
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+
+	public String getRedirect() {
+		return redirect;
+	}
+
+	public void setRedirect(String redirect) {
+		this.redirect = redirect;
+	}
+
+	public String getClientId() {
+		return clientId;
+	}
+
+	public void setClientId(String clientId) {
+		this.clientId = clientId;
+	}
+
 }

@@ -10,9 +10,10 @@ import java.util.Set;
 @Mapper
 public interface SysRestMapper extends BaseMapper<SysRest> {
 
-    Set<String> getPermissionsByUserId(Map<String, Object> param);
+	Set<String> getPermissionsByUserId(Map<String, Object> param);
 
-    Set<String> getUrlByUserIdAndApplicationName(Map<String, Object> param);
+	Set<String> getUrlByUserIdAndApplicationName(Map<String, Object> param);
 
-    Set<String> queryDigestByApplicationName(Map<String, Object> param);
+	Set<String> queryDigestByApplicationName(Map<String, Object> param);
+
 }

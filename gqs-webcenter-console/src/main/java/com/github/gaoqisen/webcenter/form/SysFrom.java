@@ -7,22 +7,24 @@ import java.util.List;
 
 public class SysFrom {
 
-    private List<SysRest> restList;
-    private SysCode sysCode;
+	private List<SysRest> restList;
 
-    public SysCode getSysCode() {
-        return sysCode;
-    }
+	private SysCode sysCode;
 
-    public void setSysCode(SysCode sysCode) {
-        this.sysCode = sysCode;
-    }
+	public SysCode getSysCode() {
+		return sysCode;
+	}
 
-    public List<SysRest> getRestList() {
-        return restList;
-    }
+	public void setSysCode(SysCode sysCode) {
+		this.sysCode = sysCode;
+	}
 
-    public void setRestList(List<SysRest> restList) {
-        this.restList = restList;
-    }
+	public List<SysRest> getRestList() {
+		return restList;
+	}
+
+	public void setRestList(List<SysRest> restList) {
+		this.restList = restList;
+	}
+
 }

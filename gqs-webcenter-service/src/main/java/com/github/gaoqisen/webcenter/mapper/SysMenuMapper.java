@@ -11,9 +11,10 @@ import java.util.Map;
 @Mapper
 public interface SysMenuMapper extends BaseMapper<SysMenu> {
 
-    List<SysMenu> queryMenuByApplicationName(@Param("applicationName") String applicationName);
+	List<SysMenu> queryMenuByApplicationName(@Param("applicationName") String applicationName);
 
-    List<SysMenu> queryMenuByUserIdAndApplicationNameAndParentId(Map<String, Object> param);
+	List<SysMenu> queryMenuByUserIdAndApplicationNameAndParentId(Map<String, Object> param);
 
-    List<SysMenu> queryMenu(@Param("applicationName") String applicationName);
+	List<SysMenu> queryMenu(@Param("applicationName") String applicationName);
+
 }

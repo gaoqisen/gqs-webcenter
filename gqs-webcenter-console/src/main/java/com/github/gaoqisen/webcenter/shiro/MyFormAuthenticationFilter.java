@@ -11,15 +11,15 @@ import java.io.PrintWriter;
 
 public class MyFormAuthenticationFilter extends FormAuthenticationFilter {
 
-    @Override
-    protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
-        HttpServletResponse resp = (HttpServletResponse) response;
-        resp.setContentType("application/json; charset=utf-8");
-        PrintWriter out = resp.getWriter();
-        out.write(JSON.toJSONString(Result.logout("请登录后访问")));
-        out.flush();
-        out.close();
-        return false;
-    }
+	@Override
+	protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
+		HttpServletResponse resp = (HttpServletResponse) response;
+		resp.setContentType("application/json; charset=utf-8");
+		PrintWriter out = resp.getWriter();
+		out.write(JSON.toJSONString(Result.logout("请登录后访问")));
+		out.flush();
+		out.close();
+		return false;
+	}
 
 }

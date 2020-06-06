@@ -31,70 +31,74 @@ import java.util.Date;
 @Component
 public class LogAspect {
 
-    @Autowired
-    private SysLogService sysLogService;
+	@Autowired
+	private SysLogService sysLogService;
 
-    @Pointcut("@annotation(io.swagger.annotations.ApiOperation)")
-    public void pointcut() {
-    }
-    @Around("pointcut()")
-    public Object around(ProceedingJoinPoint point) throws  Throwable{
-        Object result = null;
-        long beginTime = System.currentTimeMillis();
-            // 执行方法
-        result = point.proceed();
-        // 执行时长(毫秒)
-        long time = System.currentTimeMillis() - beginTime;
-        // 保存日志
-        saveLog(point, time);
-        return result;
-    }
-    private void saveLog(ProceedingJoinPoint joinPoint, long time) {
-        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        Method method = signature.getMethod();
-        SysLog sysLog = new SysLog();
-        ApiOperation logAnnotation = method.getAnnotation(ApiOperation.class);
-        if (logAnnotation != null) {
-            // 注解上的描述
-            sysLog.setOperation(logAnnotation.value());
-        }
-        // 请求的方法名
-        String className = joinPoint.getTarget().getClass().getSimpleName();
-        String methodName = signature.getName();
-        sysLog.setMethod(className + "." + methodName);
-        // 获取request
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        Object obj = SecurityUtils.getSubject().getPrincipal();
-        // 设置IP地址
-        String ip = retrieveClientIp(request);
-        sysLog.setIp(ip);
-        // 模拟一个用户名
-        if(obj != null) {
-            SysUser user = (SysUser) obj;
-            sysLog.setUsername(user.getUsername());
-        }
-        sysLog.setParams(JSON.toJSONString(request.getParameterMap()));
-        sysLog.setTime(time);
-        sysLog.setCreateDate(new Date());
-        // 保存系统日志
-        this.sysLogService.save(sysLog);
-    }
+	@Pointcut("@annotation(io.swagger.annotations.ApiOperation)")
+	public void pointcut() {
+	}
 
-    public static String retrieveClientIp(HttpServletRequest request) {
-        String ip = request.getHeader("x-forwarded-for");
-        if (isUnAvailableIp(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-        if (isUnAvailableIp(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (isUnAvailableIp(ip)) {
-            ip = request.getRemoteAddr();
-        }
-        return ip.equals("0:0:0:0:0:0:0:1")?"127.0.0.1":ip.split(",")[0];
-    }
+	@Around("pointcut()")
+	public Object around(ProceedingJoinPoint point) throws Throwable {
+		Object result = null;
+		long beginTime = System.currentTimeMillis();
+		// 执行方法
+		result = point.proceed();
+		// 执行时长(毫秒)
+		long time = System.currentTimeMillis() - beginTime;
+		// 保存日志
+		saveLog(point, time);
+		return result;
+	}
 
-    private static boolean isUnAvailableIp(String ip) {
-        return (StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip));
-    }
+	private void saveLog(ProceedingJoinPoint joinPoint, long time) {
+		MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+		Method method = signature.getMethod();
+		SysLog sysLog = new SysLog();
+		ApiOperation logAnnotation = method.getAnnotation(ApiOperation.class);
+		if (logAnnotation != null) {
+			// 注解上的描述
+			sysLog.setOperation(logAnnotation.value());
+		}
+		// 请求的方法名
+		String className = joinPoint.getTarget().getClass().getSimpleName();
+		String methodName = signature.getName();
+		sysLog.setMethod(className + "." + methodName);
+		// 获取request
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+				.getRequest();
+		Object obj = SecurityUtils.getSubject().getPrincipal();
+		// 设置IP地址
+		String ip = retrieveClientIp(request);
+		sysLog.setIp(ip);
+		// 模拟一个用户名
+		if (obj != null) {
+			SysUser user = (SysUser) obj;
+			sysLog.setUsername(user.getUsername());
+		}
+		sysLog.setParams(JSON.toJSONString(request.getParameterMap()));
+		sysLog.setTime(time);
+		sysLog.setCreateDate(new Date());
+		// 保存系统日志
+		this.sysLogService.save(sysLog);
+	}
+
+	public static String retrieveClientIp(HttpServletRequest request) {
+		String ip = request.getHeader("x-forwarded-for");
+		if (isUnAvailableIp(ip)) {
+			ip = request.getHeader("Proxy-Client-IP");
+		}
+		if (isUnAvailableIp(ip)) {
+			ip = request.getHeader("WL-Proxy-Client-IP");
+		}
+		if (isUnAvailableIp(ip)) {
+			ip = request.getRemoteAddr();
+		}
+		return ip.equals("0:0:0:0:0:0:0:1") ? "127.0.0.1" : ip.split(",")[0];
+	}
+
+	private static boolean isUnAvailableIp(String ip) {
+		return (StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip));
+	}
+
 }

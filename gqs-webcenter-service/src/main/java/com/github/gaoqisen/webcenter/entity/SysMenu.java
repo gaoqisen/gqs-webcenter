@@ -9,200 +9,190 @@ import java.util.List;
 
 @TableName(value = "sys_menu")
 public class SysMenu {
-    @TableId(value = "menu_id", type = IdType.AUTO)
-    private Long menuId;
 
-    /**
-     * 父菜单ID，一级菜单为0
-     */
-    @TableField(value = "parent_id")
-    private Long parentId;
+	@TableId(value = "menu_id", type = IdType.AUTO)
+	private Long menuId;
 
-    /**
-     * 菜单名称
-     */
-    @TableField(value = "name")
-    private String name;
+	/**
+	 * 父菜单ID，一级菜单为0
+	 */
+	@TableField(value = "parent_id")
+	private Long parentId;
 
-    /**
-     * 菜单URL
-     */
-    @TableField(value = "url")
-    private String url;
+	/**
+	 * 菜单名称
+	 */
+	@TableField(value = "name")
+	private String name;
 
-    /**
-     * 类型   0：目录   1：菜单
-     */
-    @TableField(value = "type")
-    private Integer type;
+	/**
+	 * 菜单URL
+	 */
+	@TableField(value = "url")
+	private String url;
 
-    /**
-     * 菜单图标
-     */
-    @TableField(value = "icon")
-    private String icon;
+	/**
+	 * 类型 0：目录 1：菜单
+	 */
+	@TableField(value = "type")
+	private Integer type;
 
-    /**
-     * 排序
-     */
-    @TableField(value = "order_num")
-    private Integer orderNum;
+	/**
+	 * 菜单图标
+	 */
+	@TableField(value = "icon")
+	private String icon;
 
-    @TableField(exist=false)
-    private List<?> list;
+	/**
+	 * 排序
+	 */
+	@TableField(value = "order_num")
+	private Integer orderNum;
 
-    @TableField(exist=false)
-    private  String sysCodeId;
+	@TableField(exist = false)
+	private List<?> list;
 
-    public String getSysCodeId() {
-        return sysCodeId;
-    }
+	@TableField(exist = false)
+	private String sysCodeId;
 
-    public void setSysCodeId(String sysCodeId) {
-        this.sysCodeId = sysCodeId;
-    }
+	public String getSysCodeId() {
+		return sysCodeId;
+	}
 
-    public List<?> getList() {
-        return list;
-    }
+	public void setSysCodeId(String sysCodeId) {
+		this.sysCodeId = sysCodeId;
+	}
 
-    public void setList(List<?> list) {
-        this.list = list;
-    }
+	public List<?> getList() {
+		return list;
+	}
 
-    public static final String COL_MENU_ID = "menu_id";
+	public void setList(List<?> list) {
+		this.list = list;
+	}
 
-    public static final String COL_PARENT_ID = "parent_id";
+	public static final String COL_MENU_ID = "menu_id";
 
-    public static final String COL_NAME = "name";
+	public static final String COL_PARENT_ID = "parent_id";
 
-    public static final String COL_URL = "url";
+	public static final String COL_NAME = "name";
 
-    public static final String COL_TYPE = "type";
+	public static final String COL_URL = "url";
 
-    public static final String COL_ICON = "icon";
+	public static final String COL_TYPE = "type";
 
-    public static final String COL_ORDER_NUM = "order_num";
+	public static final String COL_ICON = "icon";
 
-    /**
-     * @return menu_id
-     */
-    public Long getMenuId() {
-        return menuId;
-    }
+	public static final String COL_ORDER_NUM = "order_num";
 
-    /**
-     * @param menuId
-     */
-    public void setMenuId(Long menuId) {
-        this.menuId = menuId;
-    }
+	/**
+	 * @return menu_id
+	 */
+	public Long getMenuId() {
+		return menuId;
+	}
 
-    /**
-     * 获取父菜单ID，一级菜单为0
-     *
-     * @return parent_id - 父菜单ID，一级菜单为0
-     */
-    public Long getParentId() {
-        return parentId;
-    }
+	/**
+	 * @param menuId
+	 */
+	public void setMenuId(Long menuId) {
+		this.menuId = menuId;
+	}
 
-    /**
-     * 设置父菜单ID，一级菜单为0
-     *
-     * @param parentId 父菜单ID，一级菜单为0
-     */
-    public void setParentId(Long parentId) {
-        this.parentId = parentId;
-    }
+	/**
+	 * 获取父菜单ID，一级菜单为0
+	 * @return parent_id - 父菜单ID，一级菜单为0
+	 */
+	public Long getParentId() {
+		return parentId;
+	}
 
-    /**
-     * 获取菜单名称
-     *
-     * @return name - 菜单名称
-     */
-    public String getName() {
-        return name;
-    }
+	/**
+	 * 设置父菜单ID，一级菜单为0
+	 * @param parentId 父菜单ID，一级菜单为0
+	 */
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
+	}
 
-    /**
-     * 设置菜单名称
-     *
-     * @param name 菜单名称
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
+	/**
+	 * 获取菜单名称
+	 * @return name - 菜单名称
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * 获取菜单URL
-     *
-     * @return url - 菜单URL
-     */
-    public String getUrl() {
-        return url;
-    }
+	/**
+	 * 设置菜单名称
+	 * @param name 菜单名称
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    /**
-     * 设置菜单URL
-     *
-     * @param url 菜单URL
-     */
-    public void setUrl(String url) {
-        this.url = url;
-    }
+	/**
+	 * 获取菜单URL
+	 * @return url - 菜单URL
+	 */
+	public String getUrl() {
+		return url;
+	}
 
-    /**
-     * 获取类型   0：目录   1：菜单   2：按钮
-     *
-     * @return type - 类型   0：目录   1：菜单   2：按钮
-     */
-    public Integer getType() {
-        return type;
-    }
+	/**
+	 * 设置菜单URL
+	 * @param url 菜单URL
+	 */
+	public void setUrl(String url) {
+		this.url = url;
+	}
 
-    /**
-     * 设置类型   0：目录   1：菜单   2：按钮
-     *
-     * @param type 类型   0：目录   1：菜单   2：按钮
-     */
-    public void setType(Integer type) {
-        this.type = type;
-    }
+	/**
+	 * 获取类型 0：目录 1：菜单 2：按钮
+	 * @return type - 类型 0：目录 1：菜单 2：按钮
+	 */
+	public Integer getType() {
+		return type;
+	}
 
-    /**
-     * 获取菜单图标
-     *
-     * @return icon - 菜单图标
-     */
-    public String getIcon() {
-        return icon;
-    }
+	/**
+	 * 设置类型 0：目录 1：菜单 2：按钮
+	 * @param type 类型 0：目录 1：菜单 2：按钮
+	 */
+	public void setType(Integer type) {
+		this.type = type;
+	}
 
-    /**
-     * 设置菜单图标
-     *
-     * @param icon 菜单图标
-     */
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
+	/**
+	 * 获取菜单图标
+	 * @return icon - 菜单图标
+	 */
+	public String getIcon() {
+		return icon;
+	}
 
-    /**
-     * 获取排序
-     *
-     * @return order_num - 排序
-     */
-    public Integer getOrderNum() {
-        return orderNum;
-    }
+	/**
+	 * 设置菜单图标
+	 * @param icon 菜单图标
+	 */
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
 
-    /**
-     * 设置排序
-     *
-     * @param orderNum 排序
-     */
-    public void setOrderNum(Integer orderNum) {
-        this.orderNum = orderNum;
-    }
+	/**
+	 * 获取排序
+	 * @return order_num - 排序
+	 */
+	public Integer getOrderNum() {
+		return orderNum;
+	}
+
+	/**
+	 * 设置排序
+	 * @param orderNum 排序
+	 */
+	public void setOrderNum(Integer orderNum) {
+		this.orderNum = orderNum;
+	}
+
 }

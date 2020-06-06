@@ -11,9 +11,9 @@ import java.util.Map;
 @Service
 public class SysCodeServiceImpl extends ServiceImpl<SysCodeMapper, SysCode> implements SysCodeService {
 
-    @Override
-    public Map<String, String> sysStatisticsl() {
-        return this.baseMapper.sysStatisticsl();
-    }
-}
+	@Override
+	public Map<String, String> sysStatisticsl() {
+		return this.baseMapper.sysStatisticsl();
+	}
 
+}

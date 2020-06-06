@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
 
-public interface SysUserRoleService extends IService<SysUserRole>{
+public interface SysUserRoleService extends IService<SysUserRole> {
 
-    List<Long> queryRoleIdList(String userId);
+	List<Long> queryRoleIdList(String userId);
 
 }

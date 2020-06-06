@@ -9,6 +9,6 @@ import java.util.Map;
 @Mapper
 public interface SysCodeMapper extends BaseMapper<SysCode> {
 
-    Map<String, String> sysStatisticsl();
+	Map<String, String> sysStatisticsl();
 
 }

@@ -23,52 +23,54 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class RestBatchInsertTask {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Autowired
-    private StringRedisTemplate stringRedisTemplate;
+	@Autowired
+	private StringRedisTemplate stringRedisTemplate;
 
-    @Autowired
-    private SysRestService sysRestService;
+	@Autowired
+	private SysRestService sysRestService;
 
-    private static Boolean isRuning = false;
+	private static Boolean isRuning = false;
 
-    public void beginProcess() {
-        while (true) {
-            String restInsertInfo = stringRedisTemplate.opsForList().rightPop(RedisKeyConstant.RESTDATASET, 10, TimeUnit.SECONDS);
-            if(StringUtils.isBlank(restInsertInfo)) {
-                return;
-            }
-            try{
-                List<SysRest> restList = JSON.parseArray(restInsertInfo, SysRest.class);
-                for(SysRest sysRest : restList) {
-                    sysRest.setCreateTime(new Date());
-                    sysRest.setDigest(DigestUtils.getDigest(sysRest.getApplicationName().concat(sysRest.getUrl())));
-                    this.sysRestService.saveOrUpdate(sysRest);
-                }
-                String currentApplicationName = restList.get(0).getApplicationName();
-                String currentApplicationRest = stringRedisTemplate.opsForValue().get(currentApplicationName);
-                if(currentApplicationRest == null || currentApplicationRest.isEmpty()) {
-                    List<SysRest> list = this.sysRestService.list(new QueryWrapper<SysRest>().eq("application_name",currentApplicationName));
-                    stringRedisTemplate.opsForValue().set(currentApplicationName, JSON.toJSONString(list));
-                }
-                logger.info("Redis消费批量REST新增.");
-            }catch(Exception e) {
-                logger.error("REST接口批量插入失败: " + restInsertInfo);
-                return;
-            }
-        }
-    }
+	public void beginProcess() {
+		while (true) {
+			String restInsertInfo = stringRedisTemplate.opsForList().rightPop(RedisKeyConstant.RESTDATASET, 10,
+					TimeUnit.SECONDS);
+			if (StringUtils.isBlank(restInsertInfo)) {
+				return;
+			}
+			try {
+				List<SysRest> restList = JSON.parseArray(restInsertInfo, SysRest.class);
+				for (SysRest sysRest : restList) {
+					sysRest.setCreateTime(new Date());
+					sysRest.setDigest(DigestUtils.getDigest(sysRest.getApplicationName().concat(sysRest.getUrl())));
+					this.sysRestService.saveOrUpdate(sysRest);
+				}
+				String currentApplicationName = restList.get(0).getApplicationName();
+				String currentApplicationRest = stringRedisTemplate.opsForValue().get(currentApplicationName);
+				if (currentApplicationRest == null || currentApplicationRest.isEmpty()) {
+					List<SysRest> list = this.sysRestService
+							.list(new QueryWrapper<SysRest>().eq("application_name", currentApplicationName));
+					stringRedisTemplate.opsForValue().set(currentApplicationName, JSON.toJSONString(list));
+				}
+				logger.info("Redis消费批量REST新增.");
+			}
+			catch (Exception e) {
+				logger.error("REST接口批量插入失败: " + restInsertInfo);
+				return;
+			}
+		}
+	}
 
-    @Scheduled(cron = "${webcenter.scheduled.cron}")
-    public void handleRestBatchInsert(){
-        if(isRuning) {
-            return;
-        }
-        isRuning = true;
-        beginProcess();
-        isRuning = false;
-    }
-
+	@Scheduled(cron = "${webcenter.scheduled.cron}")
+	public void handleRestBatchInsert() {
+		if (isRuning) {
+			return;
+		}
+		isRuning = true;
+		beginProcess();
+		isRuning = false;
+	}
 
 }

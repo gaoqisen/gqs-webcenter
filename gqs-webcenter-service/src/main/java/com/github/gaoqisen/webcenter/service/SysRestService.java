@@ -9,12 +9,12 @@ import java.util.Set;
 
 public interface SysRestService extends IService<SysRest> {
 
-    Set<String> getPermissionsByUserIdAndApplicationName(Integer userId, String applicationName);
+	Set<String> getPermissionsByUserIdAndApplicationName(Integer userId, String applicationName);
 
-    Set<String> getUrlByUserIdAndApplicationName(Integer userId, String applicationName);
+	Set<String> getUrlByUserIdAndApplicationName(Integer userId, String applicationName);
 
-    IPage<SysRest> queryPage(CurrentPage gPage);
+	IPage<SysRest> queryPage(CurrentPage gPage);
 
-    Set<String> queryDigestByApplicationName(String applicationName, Long roleId);
+	Set<String> queryDigestByApplicationName(String applicationName, Long roleId);
+
 }
-

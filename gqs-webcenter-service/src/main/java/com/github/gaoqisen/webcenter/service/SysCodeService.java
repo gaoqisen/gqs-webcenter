@@ -7,7 +7,6 @@ import java.util.Map;
 
 public interface SysCodeService extends IService<SysCode> {
 
-    Map<String, String> sysStatisticsl();
+	Map<String, String> sysStatisticsl();
 
 }
-

@@ -1,29 +1,31 @@
 package com.github.gaoqisen.webcenter.form;
 
-
 public class PasswordForm {
-    /**
-     * 原密码
-     */
-    private String password;
-    /**
-     * 新密码
-     */
-    private String newPassword;
 
-    public String getPassword() {
-        return password;
-    }
+	/**
+	 * 原密码
+	 */
+	private String password;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	/**
+	 * 新密码
+	 */
+	private String newPassword;
 
-    public String getNewPassword() {
-        return newPassword;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getNewPassword() {
+		return newPassword;
+	}
+
+	public void setNewPassword(String newPassword) {
+		this.newPassword = newPassword;
+	}
+
 }

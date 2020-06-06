@@ -15,35 +15,36 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/sys/rest")
 public class SysRestController {
 
-    @Autowired
-    private SysRestService sysRestService;
+	@Autowired
+	private SysRestService sysRestService;
 
-    @Value("${spring.application.name}")
-    private String springApplicationName;
+	@Value("${spring.application.name}")
+	private String springApplicationName;
 
-    @ApiOperation("获取rest接口对象")
-    @GetMapping("listRestByApplicationName")
-    public  Result listObject(@RequestParam(name = "applicationName", required = false) String applicationName) {
-        if(StringUtils.isBlank(applicationName)) {
-            applicationName = springApplicationName;
-        }
-        return Result.success().put("listObject", this.sysRestService.list(new QueryWrapper<SysRest>().eq(SysRest.COL_APPLICATION_NAME, applicationName)));
-    }
+	@ApiOperation("获取rest接口对象")
+	@GetMapping("listRestByApplicationName")
+	public Result listObject(@RequestParam(name = "applicationName", required = false) String applicationName) {
+		if (StringUtils.isBlank(applicationName)) {
+			applicationName = springApplicationName;
+		}
+		return Result.success().put("listObject", this.sysRestService
+				.list(new QueryWrapper<SysRest>().eq(SysRest.COL_APPLICATION_NAME, applicationName)));
+	}
 
-    @ApiOperation("分页获取REST接口信息")
-    @PostMapping("list")
-    public Result list(@RequestBody CurrentPage gPage) {
-        return Result.success().put("restList", this.sysRestService.queryPage(gPage));
-    }
+	@ApiOperation("分页获取REST接口信息")
+	@PostMapping("list")
+	public Result list(@RequestBody CurrentPage gPage) {
+		return Result.success().put("restList", this.sysRestService.queryPage(gPage));
+	}
 
-    @ApiOperation("REST接口修改")
-    @PostMapping("update")
-    public Result update(@RequestBody SysRest sysRest) {
-        if(StringUtils.isBlank(sysRest.getDigest())){
-            return Result.error("摘要不能为空");
-        }
-        this.sysRestService.updateById(sysRest);
-        return Result.success();
-    }
+	@ApiOperation("REST接口修改")
+	@PostMapping("update")
+	public Result update(@RequestBody SysRest sysRest) {
+		if (StringUtils.isBlank(sysRest.getDigest())) {
+			return Result.error("摘要不能为空");
+		}
+		this.sysRestService.updateById(sysRest);
+		return Result.success();
+	}
 
 }

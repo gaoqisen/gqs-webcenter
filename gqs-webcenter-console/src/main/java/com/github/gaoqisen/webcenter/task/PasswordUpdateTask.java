@@ -18,43 +18,45 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class PasswordUpdateTask {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Autowired
-    private StringRedisTemplate stringRedisTemplate;
+	@Autowired
+	private StringRedisTemplate stringRedisTemplate;
 
-    @Autowired
-    private SysUserService sysUserService;
+	@Autowired
+	private SysUserService sysUserService;
 
-    private static Boolean isRuning = false;
+	private static Boolean isRuning = false;
 
-    public void beginProcess() {
-        while (true) {
-            String passwordInfo = stringRedisTemplate.opsForList().rightPop(RedisKeyConstant.PASSWORDSET, 10, TimeUnit.SECONDS);
-            if(StringUtils.isBlank(passwordInfo)) {
-                return;
-            }
-            try{
-                JSONObject jsonObject = JSONObject.parseObject(passwordInfo);
-                sysUserService.updatePassword(jsonObject.getInteger("userId"), jsonObject.getString("password"), jsonObject.getString("newPassword"));
-                logger.info("Redis消费修改密码定时.");
-            }catch(Exception e) {
-                logger.error("密码修改失败: " + passwordInfo);
-                return;
-            }
+	public void beginProcess() {
+		while (true) {
+			String passwordInfo = stringRedisTemplate.opsForList().rightPop(RedisKeyConstant.PASSWORDSET, 10,
+					TimeUnit.SECONDS);
+			if (StringUtils.isBlank(passwordInfo)) {
+				return;
+			}
+			try {
+				JSONObject jsonObject = JSONObject.parseObject(passwordInfo);
+				sysUserService.updatePassword(jsonObject.getInteger("userId"), jsonObject.getString("password"),
+						jsonObject.getString("newPassword"));
+				logger.info("Redis消费修改密码定时.");
+			}
+			catch (Exception e) {
+				logger.error("密码修改失败: " + passwordInfo);
+				return;
+			}
 
-        }
-    }
+		}
+	}
 
-    @Scheduled(cron = "${webcenter.scheduled.cron}")
-    public void handlePasswordUpdate(){
-        if(isRuning) {
-            return;
-        }
-        isRuning = true;
-        beginProcess();
-        isRuning = false;
-    }
-
+	@Scheduled(cron = "${webcenter.scheduled.cron}")
+	public void handlePasswordUpdate() {
+		if (isRuning) {
+			return;
+		}
+		isRuning = true;
+		beginProcess();
+		isRuning = false;
+	}
 
 }

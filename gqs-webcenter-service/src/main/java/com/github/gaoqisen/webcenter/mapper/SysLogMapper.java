@@ -10,6 +10,6 @@ import java.util.Map;
 @Mapper
 public interface SysLogMapper extends BaseMapper<SysLog> {
 
-    List<Map<String, String>> statisticalUserLogin(Map<String, String> param);
+	List<Map<String, String>> statisticalUserLogin(Map<String, String> param);
 
 }

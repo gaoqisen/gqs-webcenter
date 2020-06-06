@@ -7,16 +7,17 @@ import com.github.gaoqisen.webcenter.utils.CurrentPage;
 
 import java.util.List;
 
-public interface SysMenuService extends IService<SysMenu>{
+public interface SysMenuService extends IService<SysMenu> {
 
-    // 分页获取菜单
-    IPage<SysMenu> queryList(CurrentPage currentPage);
+	// 分页获取菜单
+	IPage<SysMenu> queryList(CurrentPage currentPage);
 
-    List<SysMenu> queryMenuByApplicationName(String applicationName);
+	List<SysMenu> queryMenuByApplicationName(String applicationName);
 
-    List<SysMenu> queryMenuByUserIdAndApplicationNameAndParentId(Integer userId, String applicationName, Long parentId);
+	List<SysMenu> queryMenuByUserIdAndApplicationNameAndParentId(Integer userId, String applicationName, Long parentId);
 
-    List<SysMenu> queryMenuByUserIdAndApplicationName(Integer userId, String applicationName);
+	List<SysMenu> queryMenuByUserIdAndApplicationName(Integer userId, String applicationName);
 
-    List<SysMenu> queryMenu(String applicationName);
+	List<SysMenu> queryMenu(String applicationName);
+
 }

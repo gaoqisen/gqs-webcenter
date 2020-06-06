@@ -5,8 +5,8 @@ import com.github.gaoqisen.webcenter.entity.SysRole;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.gaoqisen.webcenter.utils.CurrentPage;
 
-public interface SysRoleService extends IService<SysRole>{
+public interface SysRoleService extends IService<SysRole> {
 
+	IPage queryPage(CurrentPage currentPage);
 
-    IPage queryPage(CurrentPage currentPage);
 }

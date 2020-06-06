@@ -10,4 +10,3 @@ import com.github.gaoqisen.webcenter.service.SysCodeMenuService;
 public class SysCodeMenuServiceImpl extends ServiceImpl<SysCodeMenuMapper, SysCodeMenu> implements SysCodeMenuService {
 
 }
-
