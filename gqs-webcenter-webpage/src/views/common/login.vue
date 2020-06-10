@@ -178,6 +178,7 @@
       opacity: .6;
     }
     .login-main {
+      border-radius: 5px;
       padding: 40px 50px 50px;
       width: 350px;
       height: 400px;

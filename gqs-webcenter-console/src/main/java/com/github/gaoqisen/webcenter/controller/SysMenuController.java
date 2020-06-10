@@ -55,7 +55,7 @@ public class SysMenuController {
 		if (sysUser == null) {
 			// 未获取到用户信息，判断为其他系统登出，当前系统也登出
 			SecurityUtils.getSubject().logout();
-			return Result.success().put("menuList", new ArrayList()).put("permList", new Set[] {});
+			return Result.error("用户获取失败");
 		}
 		// 通userId和应用名获取菜单
 		List<SysMenu> sysMenuList = sysMenuService.queryMenuByUserIdAndApplicationName(sysUser.getUserId(),

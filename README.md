@@ -19,7 +19,6 @@
     </p>
 </p>
 
-
 ## 一、简介
 
 ### 1.1 概述
@@ -60,26 +59,80 @@ Webpack4.0.0+
 
 ### 2.1 运行Webcenter服务端
 
-#### 2.1.1 环境准备
+#### 方式一(docker 推荐)
 
-1. 请先安装Redis、Mysql、JDK1.8。
-2. 获取 “WebCenter数据库初始化SQL脚本(/db/[webcenter.sql](https://github.com/gaoqisen/gqs-webcenter/blob/master/db/webcenter.sql))” 并执行。
-
-#### 2.1.2 获取jar包
-
-- github: https://github.com/gaoqisen/gqs-webcenter/releases
-- gitee: https://gitee.com/gaoqisen/gqs-webcenter/releases
-
-#### 2.1.3 启动jar包
+> 该docker-compose安装了redis、mysql和webcenter3个服务，是否暴露端口可以自行修改。如果本地已经安装了mysql和redis可以只安装my_webcenter容器，安装的时候需要将容器之前的容器名改为db_mysql和db_redis并创建net_webcenter网络将db_mysql和db_redis加入到该网络中。启动成功之后将sql导入到数据库中访问 http://localhost:8000 即可。docker容器间可以参考: https://www.cnblogs.com/kevingrace/p/6590319.html
 
 ```
-// 默认mysql密码123456，redis密码123456启动
-nohub jara -Xms1024m -Xmx1024m -jar webcenter-console-1.0.0.jar
-// 修改mysql密码，redis密码
-nohup java -Xms1024m -Xmx1024m -jar webcenter-console-1.0.0.jar --spring.database.username=root --spring.database.password=23456 --spring.redis.password=23456
+version: '2.0'
+services:
+  db_mysql:
+    restart: always
+    image: mysql:5.7.22
+    container_name: db_mysql
+    ports:
+      - 3306:3306
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: 123456
+    command:
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
+      --explicit_defaults_for_timestamp=true
+      --lower_case_table_names=1
+      --max_allowed_packet=128M
+      --sql-mode="STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION,NO_ZERO_DATE,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO"
+    volumes:
+      - ./mysqldata:/var/lib/mysql
+    networks:
+      - net
+  db_redis:
+    image: redis
+    container_name: db_redis
+    command: redis-server --requirepass 123456
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redisdata:/data
+    networks:
+      - net
+  my_webcenter:
+    image: registry.cn-hangzhou.aliyuncs.com/gqs/webcenter:1.0.1
+    container_name: my_webcenter
+    ports:
+      - "8000:8000"
+    networks:
+      - net
+networks:
+  net:
+    external: 
+      # 请先创建net_webcenter网络
+      name: net_webcenter
 ```
 
-访问http://localhost:8000 即可。
+#### 方式二(jar包)
+
+1.  环境准备
+
+    - 请先安装Redis、Mysql、JDK1.8。
+    - 获取 “WebCenter数据库初始化SQL脚本(/db/[webcenter.sql](https://github.com/gaoqisen/gqs-webcenter/blob/master/db/webcenter.sql))” 并执行。
+
+2. 获取jar包
+
+    - github: https://github.com/gaoqisen/gqs-webcenter/releases
+    - gitee: https://gitee.com/gaoqisen/gqs-webcenter/releases
+    - 网盘: https://c-t.work/s/8db595c7ac4f44   密码: 7x8yr4
+3. 启动jar包
+
+    ```
+    // 默认mysql密码123456，redis密码123456启动
+    nohub jara -Xms1024m -Xmx1024m -jar webcenter-console-1.0.0.jar
+    // 修改mysql密码，redis密码
+    nohup java -Xms1024m -Xmx1024m -jar webcenter-console-1.0.0.jar --spring.database.username=root --spring.database.password=23456 --spring.redis.password=23456
+    ```
+
+即可访问http://localhost:8000 。
 
 ### 2.2 客户端搭建(前后端不分离)
 
@@ -193,6 +246,7 @@ npm run dev
         host: localhost
         # 如果服务端端口改了的话，此处的端口应保持一致
         port: 8000
+        # 通过服务端的系统管理里面获取
         clientid: WZUIIXWZUIIX
         secretkey: qOIWRbzeFvOnXUYTspfSt2ibfJPe1vtG
       ### 客服端配置，是否前后端分离，用于单点登录的地址跳转。forestage为false时，host和port可以不写
@@ -263,13 +317,13 @@ webc list
 webc init webcenter sample
 ```
 
-## 三、功能介绍
-
 > 完成上面的搭建之后，启动Maven后端和Vue前端就可以直接开发自己的业务逻辑了。
+
+## 三、功能介绍
 
 ### 3.1 系统配置
 
-给各个系统分配clientId和密匙，应用名称必须和客户端的spring.application.name一致。
+给各个系统分配clientId和密匙，应用名称必须和客户端的spring.application.name一致。每新建一个系统都需要生成不同的clientId和密钥，并更改系统的配置。
 
 ### 3.2 权限配置
 
@@ -381,6 +435,6 @@ webc boot // 快速创建一个springBoot项目
     
 ## 七、参考
     
-动态路由：https://github.com/renrenio/renren-fast-vue
-脚手架开发：https://juejin.im/post/5c94fef7f265da60fd0c15e8
-Maven上传jar包: https://www.sojson.com/blog/250.html
+- 动态路由：https://github.com/renrenio/renren-fast-vue
+- 脚手架开发：https://juejin.im/post/5c94fef7f265da60fd0c15e8
+- Maven上传jar包: https://www.sojson.com/blog/250.html

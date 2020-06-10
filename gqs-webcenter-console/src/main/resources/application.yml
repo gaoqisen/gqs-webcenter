@@ -8,18 +8,18 @@ spring:
     default-property-inclusion: non_null
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
-  ### redis配置
+  ### redis配置 db_redis需要在/etc/hosts里面添加: localhost db_redis
   redis:
-    host: localhost
+    host: db_redis
     password: 123456
     port: 6379
     timeout: 60000
-  ### 数据库配置
+  ### 数据库配置 db_mysql需要在/etc/hosts里面添加: localhost db_mysql
   datasource:
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/webcenter?characterEncoding=utf8&useSSL=false
+    url: jdbc:mysql://db_mysql:3306/webcenter?characterEncoding=utf8&useSSL=false
 mybatis:
   mapper-locations: classpath:mapping/*.xml
   type-aliases-package: com.gaoqisen.webcenter.entity

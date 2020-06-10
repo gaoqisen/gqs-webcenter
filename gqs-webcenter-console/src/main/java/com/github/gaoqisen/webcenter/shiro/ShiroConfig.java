@@ -31,7 +31,6 @@ public class ShiroConfig {
 	 */
 	@Bean
 	public ShiroFilterFactoryBean shiroFilter(DefaultWebSecurityManager securityManager) {
-		System.out.println("设置过滤规则 ShiroConfiguration.shirFilter()");
 		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
 		shiroFilterFactoryBean.setSecurityManager(securityManager);
 
