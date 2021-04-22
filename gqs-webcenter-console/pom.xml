@@ -12,7 +12,7 @@
     <description>Webcenter控制台服务端</description>
     <properties>
         <kaptcha.version>0.0.9</kaptcha.version>
-        <shiro.version>1.4.0</shiro.version>
+        <shiro.version>1.7.1</shiro.version>
         <jsonwebtoken.version>0.9.1</jsonwebtoken.version>
     </properties>
     <dependencies>
