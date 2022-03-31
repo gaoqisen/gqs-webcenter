@@ -30,7 +30,7 @@
 
     <properties>
         <shiro.version>1.4.0</shiro.version>
-        <spring.version>5.2.2.RELEASE</spring.version>
+        <spring.version>5.3.18</spring.version>
         <fastjson.version>1.2.46</fastjson.version>
         <servlet.api.version>3.0-alpha-1</servlet.api.version>
         <redis.version>2.2.3.RELEASE</redis.version>
