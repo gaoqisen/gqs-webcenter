@@ -12,7 +12,7 @@
     <inceptionYear>2020-Now</inceptionYear>
     <description>通用服务</description>
     <properties>
-        <fastjson.version>1.2.46</fastjson.version>
+        <fastjson.version>1.2.83</fastjson.version>
     </properties>
     <dependencies>
         <dependency>
