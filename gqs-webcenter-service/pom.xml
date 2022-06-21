@@ -12,7 +12,7 @@
     <inceptionYear>2020-Now</inceptionYear>
     <description>通用服务层</description>
     <properties>
-        <mysql.connector.version>5.1.10</mysql.connector.version>
+        <mysql.connector.version>8.0.28</mysql.connector.version>
     </properties>
     <dependencies>
         <dependency>
